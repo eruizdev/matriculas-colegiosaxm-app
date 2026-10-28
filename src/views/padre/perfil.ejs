@@ -1,0 +1,25 @@
+<%- include('../layouts/header') %>
+
+<h1>Hola, <%= perfil.nombre %></h1>
+<p><a href="/padre/cupos" class="btn">Consultar cupos</a></p>
+
+<%- include('../partials/mensajes') %>
+
+<h2>Mis datos</h2>
+<p>Correo: <%= perfil.correo %></p>
+<p>Documento: <%= perfil.tipoDocumento %> <%= perfil.numeroDocumento %></p>
+
+<form action="/padre/perfil" method="POST" class="formulario">
+  <label>Nombre
+    <input type="text" name="nombre" value="<%= perfil.nombre %>">
+  </label>
+  <label>Apellido
+    <input type="text" name="apellido" value="<%= perfil.apellido %>">
+  </label>
+  <label>Teléfono
+    <input type="text" name="telefono" value="<%= perfil.telefono || '' %>">
+  </label>
+  <button type="submit" class="btn">Guardar cambios</button>
+</form>
+
+<%- include('../layouts/footer') %>

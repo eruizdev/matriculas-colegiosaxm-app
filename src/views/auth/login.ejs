@@ -1,0 +1,21 @@
+<%- include('../layouts/header') %>
+
+<section class="caja-auth">
+  <h1>Ingresar</h1>
+
+  <%- include('../partials/mensajes') %>
+
+  <form action="/auth/login" method="POST" class="formulario">
+    <label>Correo
+      <input type="email" name="correo" value="<%= datos.correo || '' %>">
+    </label>
+    <label>Contraseña
+      <input type="password" name="password">
+    </label>
+    <button type="submit" class="btn">Ingresar</button>
+  </form>
+
+  <p>¿No tienes cuenta? <a href="/auth/registro">Regístrate</a></p>
+</section>
+
+<%- include('../layouts/footer') %>

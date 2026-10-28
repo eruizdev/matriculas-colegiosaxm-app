@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.titulo || 'Inicio' %> | Colegio</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header class="header">
+    <a href="/" class="logo">Colegio</a>
+    <nav class="nav">
+      <a href="/">Inicio</a>
+      <a href="/cupos">Cupos</a>
+      <a href="/requisitos">Requisitos</a>
+      <a href="/noticias">Noticias</a>
+      <a href="/contacto">Contacto</a>
+      <% if (usuario) { %>
+        <% if (usuario.rol === 'admin') { %>
+          <a href="/admin">Panel</a>
+        <% } else { %>
+          <a href="/padre/perfil">Mi perfil</a>
+        <% } %>
+        <a href="/auth/logout">Salir</a>
+      <% } else { %>
+        <a href="/auth/login">Ingresar</a>
+        <a href="/auth/registro" class="btn">Registrarse</a>
+      <% } %>
+    </nav>
+  </header>
+  <main class="contenedor">

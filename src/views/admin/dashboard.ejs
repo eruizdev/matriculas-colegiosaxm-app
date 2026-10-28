@@ -1,0 +1,24 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Panel de administración</h1>
+
+    <% if (periodo) { %>
+      <p>Periodo activo: <strong><%= periodo.nombre %></strong></p>
+    <% } else { %>
+      <p class="alerta alerta-error">No hay periodo activo. <a href="/admin/periodos">Crear o activar uno</a></p>
+    <% } %>
+
+    <div class="tarjetas">
+      <div class="tarjeta resumen"><h3><%= resumen.padres %></h3><p>Padres registrados</p></div>
+      <div class="tarjeta resumen"><h3><%= resumen.grados %></h3><p>Grados</p></div>
+      <div class="tarjeta resumen"><h3><%= resumen.cuposDisponibles %></h3><p>Cupos disponibles</p></div>
+      <div class="tarjeta resumen"><h3><%= resumen.noticias %></h3><p>Noticias</p></div>
+      <div class="tarjeta resumen"><h3><%= resumen.mensajesNoLeidos %></h3><p>Mensajes sin leer</p></div>
+    </div>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

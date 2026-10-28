@@ -1,0 +1,75 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Cupos</h1>
+
+    <%- include('../partials/mensajes') %>
+
+    <% if (grados.length === 0 || periodos.length === 0) { %>
+      <p>Primero debes crear al menos un <a href="/admin/grados">grado</a> y un <a href="/admin/periodos">periodo</a>.</p>
+    <% } else { %>
+      <form action="/admin/cupos" method="POST" class="formulario formulario-linea">
+        <select name="gradoId">
+          <option value="">Grado</option>
+          <% grados.forEach(grado => { %>
+            <option value="<%= grado.id %>"><%= grado.nombre %></option>
+          <% }) %>
+        </select>
+        <select name="periodoId">
+          <option value="">Periodo</option>
+          <% periodos.forEach(periodo => { %>
+            <option value="<%= periodo.id %>"><%= periodo.nombre %></option>
+          <% }) %>
+        </select>
+        <select name="jornada">
+          <option value="">Jornada</option>
+          <% jornadas.forEach(jornada => { %>
+            <option value="<%= jornada %>"><%= jornada %></option>
+          <% }) %>
+        </select>
+        <input type="number" name="total" placeholder="Total" value="<%= datos.total || '' %>">
+        <input type="number" name="ocupados" placeholder="Ocupados" value="<%= datos.ocupados || '' %>">
+        <button type="submit" class="btn">Agregar</button>
+      </form>
+    <% } %>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Grado</th>
+          <th>Periodo</th>
+          <th>Jornada</th>
+          <th>Total / Ocupados</th>
+          <th>Disponibles</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cupos.forEach(cupo => { %>
+          <tr>
+            <td><%= cupo.grado %></td>
+            <td><%= cupo.periodo %></td>
+            <td><%= cupo.jornada %></td>
+            <td>
+              <form action="/admin/cupos/<%= cupo.id %>/actualizar" method="POST" class="formulario-linea">
+                <input type="number" name="total" value="<%= cupo.total %>" class="input-corto">
+                <input type="number" name="ocupados" value="<%= cupo.ocupados %>" class="input-corto">
+                <button type="submit" class="btn btn-pequeno">Guardar</button>
+              </form>
+            </td>
+            <td><%= cupo.disponibles %></td>
+            <td>
+              <form action="/admin/cupos/<%= cupo.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este cupo?">
+                <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

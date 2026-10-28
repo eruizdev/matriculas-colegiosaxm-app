@@ -1,0 +1,20 @@
+<%- include('../layouts/header') %>
+
+<h1>Noticias</h1>
+
+<% if (noticias.length === 0) { %>
+  <p>No hay noticias publicadas.</p>
+<% } %>
+
+<div class="tarjetas">
+  <% noticias.forEach(noticia => { %>
+    <article class="tarjeta">
+      <h3><%= noticia.titulo %></h3>
+      <small><%= noticia.fecha %></small>
+      <p><%= noticia.resumen %></p>
+      <a href="/noticias/<%= noticia.id %>">Leer más</a>
+    </article>
+  <% }) %>
+</div>
+
+<%- include('../layouts/footer') %>

@@ -1,0 +1,40 @@
+<%- include('../layouts/header') %>
+
+<h1>Cupos disponibles</h1>
+
+<% if (!periodo) { %>
+  <p>No hay un periodo de matrículas abierto.</p>
+<% } else if (cupos.length === 0) { %>
+  <p>Todavía no se han publicado cupos para <%= periodo.nombre %>.</p>
+<% } else { %>
+  <p>Periodo: <strong><%= periodo.nombre %></strong></p>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Grado</th>
+        <th>Jornada</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% cupos.forEach(cupo => { %>
+        <tr>
+          <td><%= cupo.grado %></td>
+          <td><%= cupo.jornada %></td>
+          <td>
+            <% if (cupo.hayDisponibles) { %>
+              <span class="etiqueta etiqueta-ok">Disponible</span>
+            <% } else { %>
+              <span class="etiqueta etiqueta-no">Sin cupos</span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <% if (!usuario) { %>
+    <p><a href="/auth/registro">Regístrate</a> para ver la cantidad exacta de cupos por grado.</p>
+  <% } %>
+<% } %>
+
+<%- include('../layouts/footer') %>

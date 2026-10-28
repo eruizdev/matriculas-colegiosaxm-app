@@ -1,0 +1,32 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Mensajes de contacto</h1>
+
+    <% if (mensajes.length === 0) { %>
+      <p>No hay mensajes.</p>
+    <% } %>
+
+    <% mensajes.forEach(m => { %>
+      <article class="tarjeta <%= m.leido ? '' : 'no-leido' %>">
+        <h3><%= m.asunto %></h3>
+        <small><%= m.nombre %> - <%= m.correo %> - <%= m.fecha %></small>
+        <p><%= m.mensaje %></p>
+        <div class="acciones-tabla">
+          <% if (!m.leido) { %>
+            <form action="/admin/mensajes/<%= m.id %>/leido" method="POST">
+              <button type="submit" class="btn btn-pequeno">Marcar como leído</button>
+            </form>
+          <% } %>
+          <form action="/admin/mensajes/<%= m.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este mensaje?">
+            <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>
+          </form>
+        </div>
+      </article>
+    <% }) %>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

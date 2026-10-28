@@ -1,0 +1,18 @@
+<%- include('../layouts/header') %>
+
+<h1>Requisitos de matrícula</h1>
+
+<% if (requisitos.length === 0) { %>
+  <p>Aún no se han publicado los requisitos.</p>
+<% } else { %>
+  <ol class="lista">
+    <% requisitos.forEach(requisito => { %>
+      <li>
+        <strong><%= requisito.titulo %></strong>
+        <p><%= requisito.descripcion %></p>
+      </li>
+    <% }) %>
+  </ol>
+<% } %>
+
+<%- include('../layouts/footer') %>

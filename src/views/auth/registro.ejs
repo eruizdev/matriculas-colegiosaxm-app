@@ -1,0 +1,44 @@
+<%- include('../layouts/header') %>
+
+<section class="caja-auth">
+  <h1>Registro de padres</h1>
+
+  <%- include('../partials/mensajes') %>
+
+  <form action="/auth/registro" method="POST" class="formulario">
+    <label>Nombre
+      <input type="text" name="nombre" value="<%= datos.nombre || '' %>">
+    </label>
+    <label>Apellido
+      <input type="text" name="apellido" value="<%= datos.apellido || '' %>">
+    </label>
+    <label>Tipo de documento
+      <select name="tipoDocumento">
+        <option value="">Seleccione</option>
+        <% Object.keys(tiposDocumento).forEach(clave => { %>
+          <option value="<%= clave %>" <%= datos.tipoDocumento === clave ? 'selected' : '' %>><%= tiposDocumento[clave] %></option>
+        <% }) %>
+      </select>
+    </label>
+    <label>Número de documento
+      <input type="text" name="numeroDocumento" value="<%= datos.numeroDocumento || '' %>">
+    </label>
+    <label>Correo
+      <input type="email" name="correo" value="<%= datos.correo || '' %>">
+    </label>
+    <label>Teléfono
+      <input type="text" name="telefono" value="<%= datos.telefono || '' %>">
+    </label>
+    <label>Contraseña
+      <input type="password" name="password">
+    </label>
+    <label>Confirmar contraseña
+      <input type="password" name="confirmarPassword">
+    </label>
+    <button type="submit" class="btn">Crear cuenta</button>
+  </form>
+
+  <p>¿Ya tienes cuenta? <a href="/auth/login">Ingresa aquí</a></p>
+</section>
+
+<%- include('../layouts/footer') %>

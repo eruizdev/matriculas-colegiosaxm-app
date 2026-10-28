@@ -1,0 +1,46 @@
+<%- include('../layouts/header') %>
+
+<h1>Consultar cupos</h1>
+
+<% if (!periodo) { %>
+  <p>No hay un periodo de matrículas abierto.</p>
+<% } else { %>
+  <p>Periodo: <strong><%= periodo.nombre %></strong></p>
+
+  <form action="/padre/cupos" method="GET" class="filtro">
+    <select name="gradoId">
+      <option value="">Todos los grados</option>
+      <% grados.forEach(grado => { %>
+        <option value="<%= grado.id %>" <%= String(grado.id) === gradoId ? 'selected' : '' %>><%= grado.nombre %></option>
+      <% }) %>
+    </select>
+    <button type="submit" class="btn">Filtrar</button>
+  </form>
+
+  <% if (cupos.length === 0) { %>
+    <p>No hay cupos para mostrar.</p>
+  <% } else { %>
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Grado</th>
+          <th>Jornada</th>
+          <th>Total</th>
+          <th>Disponibles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% cupos.forEach(cupo => { %>
+          <tr>
+            <td><%= cupo.grado %></td>
+            <td><%= cupo.jornada %></td>
+            <td><%= cupo.total %></td>
+            <td><%= cupo.disponibles %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+<% } %>
+
+<%- include('../layouts/footer') %>

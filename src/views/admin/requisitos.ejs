@@ -1,0 +1,44 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Requisitos</h1>
+
+    <%- include('../partials/mensajes') %>
+
+    <form action="/admin/requisitos" method="POST" class="formulario">
+      <input type="text" name="titulo" placeholder="Título" value="<%= datos.titulo || '' %>">
+      <textarea name="descripcion" rows="3" placeholder="Descripción"><%= datos.descripcion || '' %></textarea>
+      <input type="number" name="orden" placeholder="Orden" value="<%= datos.orden || '' %>">
+      <button type="submit" class="btn">Agregar</button>
+    </form>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Título</th>
+          <th>Descripción</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% requisitos.forEach(requisito => { %>
+          <tr>
+            <td><%= requisito.orden %></td>
+            <td><%= requisito.titulo %></td>
+            <td><%= requisito.descripcion %></td>
+            <td>
+              <form action="/admin/requisitos/<%= requisito.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este requisito?">
+                <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

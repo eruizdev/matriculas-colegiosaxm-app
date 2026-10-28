@@ -1,0 +1,24 @@
+<%- include('../layouts/header') %>
+
+<h1>Contacto</h1>
+<p>Si tienes dudas sobre el proceso de matrícula escríbenos.</p>
+
+<%- include('../partials/mensajes') %>
+
+<form action="/contacto" method="POST" class="formulario">
+  <label>Nombre
+    <input type="text" name="nombre" value="<%= datos.nombre || '' %>">
+  </label>
+  <label>Correo
+    <input type="email" name="correo" value="<%= datos.correo || '' %>">
+  </label>
+  <label>Asunto
+    <input type="text" name="asunto" value="<%= datos.asunto || '' %>">
+  </label>
+  <label>Mensaje
+    <textarea name="mensaje" rows="5"><%= datos.mensaje || '' %></textarea>
+  </label>
+  <button type="submit" class="btn">Enviar</button>
+</form>
+
+<%- include('../layouts/footer') %>

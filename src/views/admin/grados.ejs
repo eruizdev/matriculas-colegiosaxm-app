@@ -1,0 +1,55 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Grados</h1>
+
+    <%- include('../partials/mensajes') %>
+
+    <form action="/admin/grados" method="POST" class="formulario formulario-linea">
+      <input type="text" name="nombre" placeholder="Nombre (ej: Primero)" value="<%= datos.nombre || '' %>">
+      <select name="nivel">
+        <option value="">Nivel</option>
+        <option value="Preescolar">Preescolar</option>
+        <option value="Primaria">Primaria</option>
+        <option value="Secundaria">Secundaria</option>
+        <option value="Media">Media</option>
+      </select>
+      <input type="number" name="orden" placeholder="Orden" value="<%= datos.orden || '' %>">
+      <button type="submit" class="btn">Agregar</button>
+    </form>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Orden</th>
+          <th>Nombre</th>
+          <th>Nivel</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% grados.forEach(grado => { %>
+          <tr>
+            <td><%= grado.orden %></td>
+            <td><%= grado.nombre %></td>
+            <td><%= grado.nivel %></td>
+            <td><%= grado.activo ? 'Activo' : 'Inactivo' %></td>
+            <td class="acciones-tabla">
+              <form action="/admin/grados/<%= grado.id %>/estado" method="POST">
+                <button type="submit" class="btn btn-pequeno"><%= grado.activo ? 'Desactivar' : 'Activar' %></button>
+              </form>
+              <form action="/admin/grados/<%= grado.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este grado?">
+                <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

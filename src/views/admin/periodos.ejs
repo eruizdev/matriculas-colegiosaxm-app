@@ -1,0 +1,54 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Periodos académicos</h1>
+
+    <%- include('../partials/mensajes') %>
+
+    <form action="/admin/periodos" method="POST" class="formulario formulario-linea">
+      <input type="text" name="nombre" placeholder="Nombre (ej: Matrículas 2027)" value="<%= datos.nombre || '' %>">
+      <input type="number" name="anio" placeholder="Año" value="<%= datos.anio || '' %>">
+      <input type="date" name="fechaInicio" value="<%= datos.fechaInicio || '' %>">
+      <input type="date" name="fechaFin" value="<%= datos.fechaFin || '' %>">
+      <button type="submit" class="btn">Agregar</button>
+    </form>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Año</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% periodos.forEach(periodo => { %>
+          <tr>
+            <td><%= periodo.nombre %></td>
+            <td><%= periodo.anio %></td>
+            <td><%= periodo.fechaInicio %></td>
+            <td><%= periodo.fechaFin %></td>
+            <td><%= periodo.activo ? 'Activo' : 'Inactivo' %></td>
+            <td class="acciones-tabla">
+              <% if (!periodo.activo) { %>
+                <form action="/admin/periodos/<%= periodo.id %>/activar" method="POST">
+                  <button type="submit" class="btn btn-pequeno">Activar</button>
+                </form>
+              <% } %>
+              <form action="/admin/periodos/<%= periodo.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este periodo?">
+                <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>
