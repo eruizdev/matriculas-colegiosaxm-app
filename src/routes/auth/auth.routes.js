@@ -3,7 +3,6 @@ const authController = require('../../controllers/auth/auth.controller');
 const AuthMiddleware = require('../../middlewares/auth.middleware');
 const ValidacionMiddleware = require('../../middlewares/validacion.middleware');
 const AuthValidator = require('../../validators/auth.validator');
-const TipoDocumento = require('../../constants/tipo-documento');
 
 const router = Router();
 
@@ -19,7 +18,7 @@ router.get('/registro', AuthMiddleware.soloInvitados, authController.mostrarRegi
 router.post(
   '/registro',
   AuthMiddleware.soloInvitados,
-  ValidacionMiddleware.validar(AuthValidator.validarRegistro, 'auth/registro', { titulo: 'Registro', tiposDocumento: TipoDocumento }),
+  ValidacionMiddleware.validar(AuthValidator.validarRegistro, 'auth/registro', { titulo: 'Registro' }),
   authController.registro
 );
 

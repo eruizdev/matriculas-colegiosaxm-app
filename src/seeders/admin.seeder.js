@@ -11,7 +11,7 @@ class AdminSeeder {
     const password = await PasswordUtil.encriptar(Env.ADMIN_PASSWORD);
     usuarioRepository.create({
       nombre: 'Administrador',
-      apellido: 'General',
+      telefono: '',
       correo: Env.ADMIN_CORREO,
       password,
       rol: Roles.ADMIN

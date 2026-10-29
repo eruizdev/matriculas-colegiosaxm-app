@@ -1,6 +1,5 @@
 const authService = require('../../services/auth.service');
 const AppError = require('../../errors/app-error');
-const TipoDocumento = require('../../constants/tipo-documento');
 const Roles = require('../../constants/roles');
 
 class AuthController {
@@ -20,7 +19,7 @@ class AuthController {
         return res.status(error.statusCode).render('auth/login', {
           titulo: 'Ingresar',
           errores: [error.message],
-          datos: req.body
+          datos: { correo: req.body.correo }
         });
       }
       next(error);
@@ -28,7 +27,7 @@ class AuthController {
   }
 
   mostrarRegistro(req, res) {
-    res.render('auth/registro', { titulo: 'Registro', tiposDocumento: TipoDocumento, datos: {} });
+    res.render('auth/registro', { titulo: 'Registro', datos: {} });
   }
 
   async registro(req, res, next) {
@@ -40,9 +39,8 @@ class AuthController {
       if (error instanceof AppError) {
         return res.status(error.statusCode).render('auth/registro', {
           titulo: 'Registro',
-          tiposDocumento: TipoDocumento,
           errores: [error.message],
-          datos: req.body
+          datos: { nombre: req.body.nombre, telefono: req.body.telefono, correo: req.body.correo }
         });
       }
       next(error);

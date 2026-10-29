@@ -7,19 +7,30 @@
 
 <h2>Mis datos</h2>
 <p>Correo: <%= perfil.correo %></p>
-<p>Documento: <%= perfil.tipoDocumento %> <%= perfil.numeroDocumento %></p>
+<p>Registrado el <%= perfil.fechaRegistro %></p>
 
 <form action="/padre/perfil" method="POST" class="formulario">
-  <label>Nombre
+  <label>Nombre completo
     <input type="text" name="nombre" value="<%= perfil.nombre %>">
   </label>
-  <label>Apellido
-    <input type="text" name="apellido" value="<%= perfil.apellido %>">
-  </label>
-  <label>Teléfono
-    <input type="text" name="telefono" value="<%= perfil.telefono || '' %>">
+  <label>Número de teléfono
+    <input type="tel" name="telefono" value="<%= perfil.telefono %>">
   </label>
   <button type="submit" class="btn">Guardar cambios</button>
+</form>
+
+<h2>Cambiar contraseña</h2>
+<form action="/padre/perfil/password" method="POST" class="formulario">
+  <label>Contraseña actual
+    <input type="password" name="passwordActual">
+  </label>
+  <label>Nueva contraseña
+    <input type="password" name="passwordNueva">
+  </label>
+  <label>Confirmar nueva contraseña
+    <input type="password" name="confirmarPassword">
+  </label>
+  <button type="submit" class="btn">Cambiar contraseña</button>
 </form>
 
 <%- include('../layouts/footer') %>

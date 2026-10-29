@@ -6,28 +6,14 @@
   <%- include('../partials/mensajes') %>
 
   <form action="/auth/registro" method="POST" class="formulario">
-    <label>Nombre
+    <label>Nombre completo
       <input type="text" name="nombre" value="<%= datos.nombre || '' %>">
     </label>
-    <label>Apellido
-      <input type="text" name="apellido" value="<%= datos.apellido || '' %>">
-    </label>
-    <label>Tipo de documento
-      <select name="tipoDocumento">
-        <option value="">Seleccione</option>
-        <% Object.keys(tiposDocumento).forEach(clave => { %>
-          <option value="<%= clave %>" <%= datos.tipoDocumento === clave ? 'selected' : '' %>><%= tiposDocumento[clave] %></option>
-        <% }) %>
-      </select>
-    </label>
-    <label>Número de documento
-      <input type="text" name="numeroDocumento" value="<%= datos.numeroDocumento || '' %>">
+    <label>Número de teléfono
+      <input type="tel" name="telefono" value="<%= datos.telefono || '' %>">
     </label>
     <label>Correo
       <input type="email" name="correo" value="<%= datos.correo || '' %>">
-    </label>
-    <label>Teléfono
-      <input type="text" name="telefono" value="<%= datos.telefono || '' %>">
     </label>
     <label>Contraseña
       <input type="password" name="password">

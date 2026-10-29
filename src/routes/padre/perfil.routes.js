@@ -5,5 +5,6 @@ const router = Router();
 
 router.get('/', perfilController.index);
 router.post('/', perfilController.actualizar);
+router.post('/password', perfilController.cambiarPassword);
 
 module.exports = router;

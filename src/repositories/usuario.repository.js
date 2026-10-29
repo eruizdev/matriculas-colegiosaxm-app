@@ -15,15 +15,32 @@ class UsuarioRepository {
   }
 
   findByCorreo(correo) {
-    return this.usuarios.find(u => u.correo === correo.toLowerCase());
+    return this.usuarios.find(u => u.correo === correo.trim().toLowerCase());
+  }
+
+  findByTelefono(telefono) {
+    return this.usuarios.find(u => u.telefono === telefono);
   }
 
   findByRol(rol) {
     return this.usuarios.filter(u => u.rol === rol);
   }
 
+  existeCorreo(correo) {
+    return Boolean(this.findByCorreo(correo));
+  }
+
+  existeTelefono(telefono, excluirId) {
+    const usuario = this.findByTelefono(telefono);
+    return Boolean(usuario) && usuario.id !== Number(excluirId);
+  }
+
   create(data) {
-    const usuario = new Usuario({ ...data, id: this.siguienteId++, correo: data.correo.toLowerCase() });
+    const usuario = new Usuario({
+      ...data,
+      id: this.siguienteId++,
+      correo: data.correo.trim().toLowerCase()
+    });
     this.usuarios.push(usuario);
     return usuario;
   }

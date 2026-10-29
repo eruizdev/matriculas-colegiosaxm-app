@@ -12,9 +12,10 @@
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Documento</th>
             <th>Correo</th>
             <th>Teléfono</th>
+            <th>Registro</th>
+            <th>Último acceso</th>
             <th>Estado</th>
             <th></th>
           </tr>
@@ -22,10 +23,11 @@
         <tbody>
           <% usuarios.forEach(u => { %>
             <tr>
-              <td><%= u.nombreCompleto %></td>
-              <td><%= u.numeroDocumento %></td>
+              <td><%= u.nombre %></td>
               <td><%= u.correo %></td>
               <td><%= u.telefono %></td>
+              <td><%= u.fechaRegistro %></td>
+              <td><%= u.ultimoAcceso %></td>
               <td><%= u.activo ? 'Activo' : 'Inactivo' %></td>
               <td>
                 <form action="/admin/usuarios/<%= u.id %>/estado" method="POST">

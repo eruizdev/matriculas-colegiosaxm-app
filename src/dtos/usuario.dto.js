@@ -1,18 +1,16 @@
-const TipoDocumento = require('../constants/tipo-documento');
+const FechaUtil = require('../utils/fecha.util');
 
 class UsuarioDto {
   static desde(usuario) {
     return {
       id: usuario.id,
       nombre: usuario.nombre,
-      apellido: usuario.apellido,
-      nombreCompleto: usuario.nombreCompleto(),
-      tipoDocumento: TipoDocumento[usuario.tipoDocumento] || '',
-      numeroDocumento: usuario.numeroDocumento,
-      correo: usuario.correo,
       telefono: usuario.telefono,
+      correo: usuario.correo,
       rol: usuario.rol,
-      activo: usuario.activo
+      activo: usuario.activo,
+      fechaRegistro: FechaUtil.formatear(usuario.fechaRegistro),
+      ultimoAcceso: usuario.ultimoAcceso ? FechaUtil.formatear(usuario.ultimoAcceso) : 'Nunca'
     };
   }
 }

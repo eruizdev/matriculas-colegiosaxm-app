@@ -1,26 +1,28 @@
 const Roles = require('../constants/roles');
 
 class Usuario {
-  constructor({ id, nombre, apellido, tipoDocumento, numeroDocumento, correo, telefono, password, rol = Roles.PADRE, activo = true, fechaRegistro = new Date() }) {
+  constructor({ id, nombre, telefono, correo, password, rol = Roles.PADRE, activo = true, fechaRegistro = new Date(), ultimoAcceso = null }) {
     this.id = id;
     this.nombre = nombre;
-    this.apellido = apellido;
-    this.tipoDocumento = tipoDocumento;
-    this.numeroDocumento = numeroDocumento;
-    this.correo = correo;
     this.telefono = telefono;
+    this.correo = correo;
     this.password = password;
     this.rol = rol;
     this.activo = activo;
     this.fechaRegistro = fechaRegistro;
-  }
-
-  nombreCompleto() {
-    return `${this.nombre} ${this.apellido}`;
+    this.ultimoAcceso = ultimoAcceso;
   }
 
   esAdmin() {
     return this.rol === Roles.ADMIN;
+  }
+
+  esPadre() {
+    return this.rol === Roles.PADRE;
+  }
+
+  registrarAcceso() {
+    this.ultimoAcceso = new Date();
   }
 }
 
