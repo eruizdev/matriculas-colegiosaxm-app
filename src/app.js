@@ -5,6 +5,7 @@ const Session = require('./config/session');
 const routes = require('./routes');
 const ErrorMiddleware = require('./middlewares/error.middleware');
 const AuthMiddleware = require('./middlewares/auth.middleware');
+const ColegioMiddleware = require('./middlewares/colegio.middleware');
 
 class App {
   constructor() {
@@ -17,6 +18,7 @@ class App {
   configurar() {
     this.app.set('view engine', 'ejs');
     this.app.set('views', path.join(__dirname, 'views'));
+    this.app.use(ColegioMiddleware.cargar);
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(express.static(path.join(__dirname, '..', 'public')));

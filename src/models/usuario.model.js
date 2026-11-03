@@ -29,6 +29,33 @@ class Usuario {
   registrarAcceso() {
     this.ultimoAcceso = new Date();
   }
+
+  activar() {
+    this.activo = true;
+  }
+
+  desactivar() {
+    this.activo = false;
+  }
+
+  cambiarEstado() {
+    this.activo = !this.activo;
+  }
+
+  cambiarRol(rol) {
+    if (!RolUtil.esValido(rol)) return false;
+    this.rol = rol;
+    return true;
+  }
+
+  actualizarPerfil({ nombre, telefono }) {
+    if (nombre) this.nombre = nombre.trim();
+    if (telefono) this.telefono = telefono.trim();
+  }
+
+  cambiarPassword(hash) {
+    this.password = hash;
+  }
 }
 
 module.exports = Usuario;

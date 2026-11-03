@@ -59,8 +59,7 @@ class AuthService {
     const valido = await PasswordUtil.comparar(passwordActual, usuario.password);
     if (!valido) throw new BadRequestError('La contraseña actual no es correcta');
 
-    const password = await PasswordUtil.encriptar(passwordNueva);
-    usuarioRepository.update(id, { password });
+    usuario.cambiarPassword(await PasswordUtil.encriptar(passwordNueva));
   }
 }
 

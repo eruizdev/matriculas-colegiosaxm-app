@@ -5,6 +5,10 @@ const PeriodoAcademico = require('../../src/models/periodo-academico.model');
 const Noticia = require('../../src/models/noticia.model');
 const MensajeContacto = require('../../src/models/mensaje-contacto.model');
 const Requisito = require('../../src/models/requisito.model');
+const Usuario = require('../../src/models/usuario.model');
+const Colegio = require('../../src/models/colegio.model');
+const ColegioValidator = require('../../src/validators/colegio.validator');
+const Roles = require('../../src/constants/roles');
 
 test('grado se activa, desactiva y arma su nombre', () => {
   const grado = new Grado({ id: 1, nombre: 'Primero', nivel: 'Primaria' });
@@ -54,4 +58,40 @@ test('mensaje empieza nuevo y se marca leido', () => {
 test('requisito es obligatorio por defecto', () => {
   assert.strictEqual(new Requisito({ id: 1, titulo: 'Registro civil' }).esObligatorio(), true);
   assert.strictEqual(new Requisito({ id: 2, titulo: 'Foto', obligatorio: false }).esObligatorio(), false);
+});
+
+test('usuario cambia estado, rol, perfil y contraseña', () => {
+  const usuario = new Usuario({ id: 1, nombre: 'Ana', telefono: '3001234567', correo: 'ana@mail.com', password: 'viejo' });
+  usuario.desactivar();
+  assert.strictEqual(usuario.activo, false);
+  usuario.activar();
+  usuario.cambiarEstado();
+  assert.strictEqual(usuario.activo, false);
+
+  assert.strictEqual(usuario.cambiarRol(Roles.ADMIN), true);
+  assert.strictEqual(usuario.esAdmin(), true);
+  assert.strictEqual(usuario.cambiarRol('jefe'), false);
+  assert.strictEqual(usuario.rol, Roles.ADMIN);
+
+  usuario.actualizarPerfil({ nombre: '  Ana Gómez ', telefono: '3119998888' });
+  assert.strictEqual(usuario.nombre, 'Ana Gómez');
+  assert.strictEqual(usuario.telefono, '3119998888');
+
+  usuario.cambiarPassword('nuevo');
+  assert.strictEqual(usuario.password, 'nuevo');
+});
+
+test('colegio se actualiza y sabe si tiene datos de contacto', () => {
+  const colegio = new Colegio();
+  assert.strictEqual(colegio.nombre, 'Colegio');
+  assert.strictEqual(colegio.tieneContacto(), false);
+  colegio.actualizar({ nombre: ' Colegio Central ', correo: 'INFO@colegio.com' });
+  assert.strictEqual(colegio.nombre, 'Colegio Central');
+  assert.strictEqual(colegio.correo, 'info@colegio.com');
+  assert.strictEqual(colegio.tieneContacto(), true);
+});
+
+test('validador del colegio', () => {
+  assert.deepStrictEqual(ColegioValidator.validar({ nombre: 'Colegio Central' }), []);
+  assert.strictEqual(ColegioValidator.validar({ nombre: 'C', telefono: '12', correo: 'malo' }).length, 3);
 });

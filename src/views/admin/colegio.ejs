@@ -1,0 +1,32 @@
+<%- include('../layouts/header') %>
+
+<div class="admin">
+  <%- include('../partials/admin-menu') %>
+  <section class="admin-contenido">
+    <h1>Datos del colegio</h1>
+    <p>Estos datos se muestran en la página de contacto y al pie de cada página.</p>
+
+    <%- include('../partials/mensajes') %>
+
+    <form action="/admin/colegio" method="POST" class="formulario">
+      <label>Nombre
+        <input type="text" name="nombre" value="<%= datos.nombre || '' %>">
+      </label>
+      <label>Dirección
+        <input type="text" name="direccion" value="<%= datos.direccion || '' %>">
+      </label>
+      <label>Teléfono
+        <input type="text" name="telefono" value="<%= datos.telefono || '' %>">
+      </label>
+      <label>Correo
+        <input type="email" name="correo" value="<%= datos.correo || '' %>">
+      </label>
+      <label>Horario de atención
+        <input type="text" name="horario" placeholder="Lunes a viernes de 7:00 a. m. a 3:00 p. m." value="<%= datos.horario || '' %>">
+      </label>
+      <button type="submit" class="btn">Guardar</button>
+    </form>
+  </section>
+</div>
+
+<%- include('../layouts/footer') %>

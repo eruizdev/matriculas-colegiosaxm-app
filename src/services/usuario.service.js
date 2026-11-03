@@ -37,17 +37,14 @@ class UsuarioService {
   }
 
   actualizarPerfil(id, data) {
-    this.buscar(id);
+    const usuario = this.buscar(id);
     const telefono = data.telefono.trim();
 
     if (usuarioRepository.existeTelefono(telefono, id)) {
       throw new ConflictError('Ese número de teléfono ya está registrado');
     }
 
-    const usuario = usuarioRepository.update(id, {
-      nombre: data.nombre.trim(),
-      telefono
-    });
+    usuario.actualizarPerfil({ nombre: data.nombre, telefono });
     return UsuarioDto.desde(usuario);
   }
 
@@ -65,7 +62,7 @@ class UsuarioService {
       throw new ConflictError('No se puede desactivar el único administrador activo');
     }
 
-    usuarioRepository.update(id, { activo: !usuario.activo });
+    usuario.cambiarEstado();
   }
 
   cambiarRol(id, rol, idActual) {
@@ -78,7 +75,8 @@ class UsuarioService {
       throw new ConflictError('No se puede quitar el rol al único administrador activo');
     }
 
-    return UsuarioDto.desde(usuarioRepository.update(id, { rol }));
+    usuario.cambiarRol(rol);
+    return UsuarioDto.desde(usuario);
   }
 }
 

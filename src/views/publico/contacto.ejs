@@ -3,6 +3,15 @@
 <h1>Contacto</h1>
 <p>Si tienes dudas sobre el proceso de matrícula escríbenos.</p>
 
+<% if (colegio.tieneContacto()) { %>
+  <ul class="lista-detalles">
+    <% if (colegio.direccion) { %><li><strong>Dirección:</strong> <%= colegio.direccion %></li><% } %>
+    <% if (colegio.telefono) { %><li><strong>Teléfono:</strong> <%= colegio.telefono %></li><% } %>
+    <% if (colegio.correo) { %><li><strong>Correo:</strong> <%= colegio.correo %></li><% } %>
+    <% if (colegio.horario) { %><li><strong>Horario:</strong> <%= colegio.horario %></li><% } %>
+  </ul>
+<% } %>
+
 <%- include('../partials/mensajes') %>
 
 <form action="/contacto" method="POST" class="formulario">

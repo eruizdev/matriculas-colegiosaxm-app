@@ -25,6 +25,7 @@ router.use('/admin/grados', puede(Permisos.GESTIONAR_CONTENIDO), require('./admi
 router.use('/admin/periodos', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/periodo-academico.routes'));
 router.use('/admin/noticias', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/noticia.routes'));
 router.use('/admin/requisitos', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/requisito.routes'));
+router.use('/admin/colegio', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/colegio.routes'));
 router.use('/admin/mensajes', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/mensaje-contacto.routes'));
 
 module.exports = router;
