@@ -14,6 +14,7 @@ class AdminDashboardController {
       cuposTotales: cupos.total,
       cuposOcupados: cupos.ocupados,
       cuposDisponibles: cupos.disponibles,
+      porcentajeOcupacion: cupos.porcentaje,
       noticias: noticiaService.listar().length,
       mensajesNoLeidos: mensajeContactoService.contarNoLeidos()
     };

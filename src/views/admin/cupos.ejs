@@ -99,7 +99,7 @@
                   <button type="submit" class="btn btn-pequeno" title="Ocupar un cupo" <%= cupo.hayDisponibles ? '' : 'disabled' %>>+1</button>
                 </form>
                 <form action="/admin/cupos/<%= cupo.id %>/liberar" method="POST">
-                  <button type="submit" class="btn btn-pequeno btn-secundario" title="Liberar un cupo" <%= cupo.ocupados > 0 ? '' : 'disabled' %>>-1</button>
+                  <button type="submit" class="btn btn-pequeno btn-secundario" title="Liberar un cupo" <%= cupo.puedeLiberar ? '' : 'disabled' %>>-1</button>
                 </form>
                 <form action="/admin/cupos/<%= cupo.id %>/eliminar" method="POST" data-confirmar="¿Eliminar estos cupos?">
                   <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>

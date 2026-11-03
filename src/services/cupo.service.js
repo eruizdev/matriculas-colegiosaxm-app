@@ -1,18 +1,13 @@
 const cupoRepository = require('../repositories/cupo.repository');
 const gradoRepository = require('../repositories/grado.repository');
 const periodoAcademicoRepository = require('../repositories/periodo-academico.repository');
+const CupoDto = require('../dtos/cupo.dto');
 const CupoDisponibleDto = require('../dtos/cupo-disponible.dto');
+const ResumenGradoDto = require('../dtos/resumen-grado.dto');
+const TotalesCupoDto = require('../dtos/totales-cupo.dto');
 const { BadRequestError, ConflictError, NotFoundError } = require('../errors');
 
 class CupoService {
-  convertir(cupo, periodo) {
-    return CupoDisponibleDto.desde(
-      cupo,
-      gradoRepository.findById(cupo.gradoId),
-      periodo || periodoAcademicoRepository.findById(cupo.periodoId)
-    );
-  }
-
   ordenarPorGrado(cupos) {
     const orden = cupo => {
       const grado = gradoRepository.findById(cupo.gradoId);
@@ -21,12 +16,7 @@ class CupoService {
     return [...cupos].sort((a, b) => orden(a) - orden(b));
   }
 
-  listar(filtros = {}) {
-    const cupos = cupoRepository.findByFiltros(filtros);
-    return this.ordenarPorGrado(cupos).map(c => this.convertir(c));
-  }
-
-  listarDisponibles(filtros = {}) {
+  cuposDelPeriodoActivo(filtros = {}) {
     const periodo = periodoAcademicoRepository.findActivo();
     if (!periodo) return [];
 
@@ -35,32 +25,39 @@ class CupoService {
       return grado && grado.activo;
     });
 
-    return this.ordenarPorGrado(cupos).map(c => this.convertir(c, periodo));
+    return this.ordenarPorGrado(cupos);
+  }
+
+  listar(filtros = {}) {
+    const cupos = cupoRepository.findByFiltros(filtros);
+    return this.ordenarPorGrado(cupos).map(c => CupoDto.desde(
+      c,
+      gradoRepository.findById(c.gradoId),
+      periodoAcademicoRepository.findById(c.periodoId)
+    ));
+  }
+
+  listarDisponibles(filtros = {}) {
+    return this.cuposDelPeriodoActivo(filtros).map(c => CupoDisponibleDto.desde(c, gradoRepository.findById(c.gradoId)));
   }
 
   resumenPorGrado() {
-    const resumen = [];
+    const grupos = [];
 
     this.listarDisponibles().forEach(cupo => {
-      let item = resumen.find(r => r.gradoId === cupo.gradoId);
-      if (!item) {
-        item = { gradoId: cupo.gradoId, grado: cupo.grado, nivel: cupo.nivel, total: 0, disponibles: 0, jornadas: [] };
-        resumen.push(item);
+      let grupo = grupos.find(g => g.gradoId === cupo.gradoId);
+      if (!grupo) {
+        grupo = { gradoId: cupo.gradoId, grado: cupo.grado, nivel: cupo.nivel, cupos: [] };
+        grupos.push(grupo);
       }
-      item.total += cupo.total;
-      item.disponibles += cupo.disponibles;
-      item.jornadas.push({ jornada: cupo.jornada, estado: cupo.estado });
+      grupo.cupos.push(cupo);
     });
 
-    return resumen.map(r => ({ ...r, hayDisponibles: r.disponibles > 0 }));
+    return grupos.map(g => ResumenGradoDto.desde(g, g.cupos));
   }
 
   totales() {
-    return this.listarDisponibles().reduce((suma, c) => ({
-      total: suma.total + c.total,
-      ocupados: suma.ocupados + c.ocupados,
-      disponibles: suma.disponibles + c.disponibles
-    }), { total: 0, ocupados: 0, disponibles: 0 });
+    return TotalesCupoDto.desde(this.cuposDelPeriodoActivo());
   }
 
   totalDisponibles() {

@@ -38,7 +38,7 @@ test('resume los cupos por grado', () => {
 });
 
 test('calcula los totales del periodo activo', () => {
-  assert.deepStrictEqual(cupoService.totales(), { total: 65, ocupados: 30, disponibles: 35 });
+  assert.deepStrictEqual(cupoService.totales(), { total: 65, ocupados: 30, disponibles: 35, porcentaje: 46 });
 });
 
 test('ocupa y libera cupos', () => {
