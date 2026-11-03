@@ -31,6 +31,12 @@ class GradoService {
     return gradoRepository.update(id, data);
   }
 
+  cambiarEstado(id) {
+    const grado = this.obtener(id);
+    grado.cambiarEstado();
+    return grado;
+  }
+
   eliminar(id) {
     this.obtener(id);
     if (cupoRepository.findByGrado(id).length > 0) {

@@ -9,7 +9,7 @@ class MensajeContactoDto {
       asunto: mensaje.asunto,
       mensaje: mensaje.mensaje,
       leido: mensaje.leido,
-      estado: mensaje.leido ? 'Leído' : 'Nuevo',
+      estado: mensaje.esNuevo() ? 'Nuevo' : 'Leído',
       fecha: FechaUtil.formatear(mensaje.fecha)
     };
   }

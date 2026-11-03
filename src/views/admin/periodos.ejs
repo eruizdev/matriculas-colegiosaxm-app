@@ -22,6 +22,7 @@
           <th>Año</th>
           <th>Inicio</th>
           <th>Fin</th>
+          <th>Días</th>
           <th>Estado</th>
           <th></th>
         </tr>
@@ -33,7 +34,8 @@
             <td><%= periodo.anio %></td>
             <td><%= periodo.fechaInicio %></td>
             <td><%= periodo.fechaFin %></td>
-            <td><%= periodo.estado %></td>
+            <td><%= periodo.duracionDias || '-' %></td>
+            <td><%= periodo.estado %><%= periodo.vigente ? ' (vigente)' : '' %></td>
             <td class="acciones-tabla">
               <% if (!periodo.activo) { %>
                 <form action="/admin/periodos/<%= periodo.id %>/activar" method="POST">

@@ -8,6 +8,14 @@ class MensajeContacto {
     this.leido = leido;
     this.fecha = fecha;
   }
+
+  marcarLeido() {
+    this.leido = true;
+  }
+
+  esNuevo() {
+    return !this.leido;
+  }
 }
 
 module.exports = MensajeContacto;

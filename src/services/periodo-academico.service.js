@@ -30,7 +30,8 @@ class PeriodoAcademicoService {
   activar(id) {
     this.obtener(id);
     periodoAcademicoRepository.findAll().forEach(p => {
-      p.activo = p.id === Number(id);
+      if (p.id === Number(id)) p.activar();
+      else p.desactivar();
     });
   }
 

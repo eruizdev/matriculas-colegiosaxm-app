@@ -11,6 +11,7 @@
       <input type="text" name="titulo" placeholder="Título" value="<%= datos.titulo || '' %>">
       <textarea name="descripcion" rows="3" placeholder="Descripción"><%= datos.descripcion || '' %></textarea>
       <input type="number" name="orden" placeholder="Orden" value="<%= datos.orden || '' %>">
+      <label><input type="checkbox" name="obligatorio" <%= datos.titulo === undefined || datos.obligatorio ? 'checked' : '' %>> Obligatorio</label>
       <button type="submit" class="btn">Agregar</button>
     </form>
 
@@ -20,6 +21,7 @@
           <th>Orden</th>
           <th>Título</th>
           <th>Descripción</th>
+          <th>Tipo</th>
           <th></th>
         </tr>
       </thead>
@@ -29,6 +31,7 @@
             <td><%= requisito.orden %></td>
             <td><%= requisito.titulo %></td>
             <td><%= requisito.descripcion %></td>
+            <td><%= requisito.esObligatorio() ? 'Obligatorio' : 'Opcional' %></td>
             <td>
               <form action="/admin/requisitos/<%= requisito.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este requisito?">
                 <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>

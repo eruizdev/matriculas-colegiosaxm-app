@@ -29,7 +29,7 @@ class NoticiaService {
   cambiarEstado(id) {
     const noticia = noticiaRepository.findById(id);
     if (!noticia) throw new NotFoundError('Noticia no encontrada');
-    noticiaRepository.update(id, { publicada: !noticia.publicada });
+    noticia.cambiarEstado();
   }
 
   eliminar(id) {

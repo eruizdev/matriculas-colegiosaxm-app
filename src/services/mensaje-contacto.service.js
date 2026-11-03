@@ -21,8 +21,9 @@ class MensajeContactoService {
   }
 
   marcarLeido(id) {
-    const mensaje = mensajeContactoRepository.update(id, { leido: true });
+    const mensaje = mensajeContactoRepository.findById(id);
     if (!mensaje) throw new NotFoundError('Mensaje no encontrado');
+    mensaje.marcarLeido();
   }
 
   eliminar(id) {

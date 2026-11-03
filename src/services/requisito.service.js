@@ -16,7 +16,8 @@ class RequisitoService {
     return requisitoRepository.create({
       titulo: data.titulo,
       descripcion: data.descripcion,
-      orden: Number(data.orden) || 0
+      orden: Number(data.orden) || 0,
+      obligatorio: data.obligatorio === 'on'
     });
   }
 

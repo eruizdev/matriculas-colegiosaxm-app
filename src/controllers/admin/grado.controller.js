@@ -21,8 +21,7 @@ class AdminGradoController {
 
   cambiarEstado(req, res, next) {
     try {
-      const grado = gradoService.obtener(req.params.id);
-      gradoService.actualizar(req.params.id, { activo: !grado.activo });
+      gradoService.cambiarEstado(req.params.id);
       res.redirect('/admin/grados');
     } catch (error) {
       next(error);

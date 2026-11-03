@@ -6,6 +6,22 @@ class Grado {
     this.orden = orden;
     this.activo = activo;
   }
+
+  activar() {
+    this.activo = true;
+  }
+
+  desactivar() {
+    this.activo = false;
+  }
+
+  cambiarEstado() {
+    this.activo = !this.activo;
+  }
+
+  nombreCompleto() {
+    return `${this.nombre} - ${this.nivel}`;
+  }
 }
 
 module.exports = Grado;
