@@ -31,7 +31,7 @@
             <td><%= requisito.orden %></td>
             <td><%= requisito.titulo %></td>
             <td><%= requisito.descripcion %></td>
-            <td><%= requisito.esObligatorio() ? 'Obligatorio' : 'Opcional' %></td>
+            <td><%= requisito.tipo %></td>
             <td>
               <form action="/admin/requisitos/<%= requisito.id %>/eliminar" method="POST" data-confirmar="¿Eliminar este requisito?">
                 <button type="submit" class="btn btn-pequeno btn-peligro">Eliminar</button>

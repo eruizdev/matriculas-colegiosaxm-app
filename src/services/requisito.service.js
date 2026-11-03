@@ -1,9 +1,10 @@
 const requisitoRepository = require('../repositories/requisito.repository');
+const RequisitoDto = require('../dtos/requisito.dto');
 const NotFoundError = require('../errors/not-found-error');
 
 class RequisitoService {
   listar() {
-    return requisitoRepository.findAll();
+    return requisitoRepository.findAll().map(r => RequisitoDto.desde(r));
   }
 
   obtener(id) {

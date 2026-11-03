@@ -9,7 +9,7 @@
     <% requisitos.forEach(requisito => { %>
       <li>
         <strong><%= requisito.titulo %></strong>
-        <% if (!requisito.esObligatorio()) { %><small>(opcional)</small><% } %>
+        <% if (!requisito.obligatorio) { %><small>(opcional)</small><% } %>
         <p><%= requisito.descripcion %></p>
       </li>
     <% }) %>

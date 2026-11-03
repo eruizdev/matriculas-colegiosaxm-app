@@ -7,6 +7,10 @@ const FechaUtil = require('../../src/utils/fecha.util');
 const Grado = require('../../src/models/grado.model');
 const PeriodoAcademico = require('../../src/models/periodo-academico.model');
 const MensajeContacto = require('../../src/models/mensaje-contacto.model');
+const RequisitoDto = require('../../src/dtos/requisito.dto');
+const ColegioDto = require('../../src/dtos/colegio.dto');
+const Requisito = require('../../src/models/requisito.model');
+const Colegio = require('../../src/models/colegio.model');
 
 test('GradoDto arma nombre completo y estado', () => {
   const dto = GradoDto.desde(new Grado({ id: 1, nombre: 'Primero', nivel: 'Primaria', orden: 1, activo: false }));
@@ -26,4 +30,23 @@ test('MensajeContactoDto marca los nuevos y formatea la fecha', () => {
   const dto = MensajeContactoDto.desde(new MensajeContacto({ id: 1, nombre: 'Ana', correo: 'ana@mail.com', asunto: 'Cupos', mensaje: 'Hola', leido: false, fecha }));
   assert.strictEqual(dto.estado, 'Nuevo');
   assert.strictEqual(dto.fecha, FechaUtil.formatear(fecha));
+});
+
+test('RequisitoDto dice si es obligatorio u opcional', () => {
+  const obligatorio = RequisitoDto.desde(new Requisito({ id: 1, titulo: 'Registro civil', descripcion: 'Copia' }));
+  const opcional = RequisitoDto.desde(new Requisito({ id: 2, titulo: 'Foto', descripcion: '3x4', obligatorio: false }));
+  assert.strictEqual(obligatorio.tipo, 'Obligatorio');
+  assert.strictEqual(opcional.tipo, 'Opcional');
+  assert.strictEqual(opcional.obligatorio, false);
+});
+
+test('ColegioDto arma el contacto corto y la lista de datos', () => {
+  const vacio = ColegioDto.desde(new Colegio());
+  assert.strictEqual(vacio.tieneContacto, false);
+  assert.strictEqual(vacio.contactoCorto, '');
+  assert.deepStrictEqual(vacio.datosContacto, []);
+
+  const dto = ColegioDto.desde(new Colegio({ nombre: 'Colegio Central', telefono: '6041234567', correo: 'info@colegio.com', horario: 'Lunes a viernes' }));
+  assert.strictEqual(dto.contactoCorto, '6041234567 · info@colegio.com');
+  assert.deepStrictEqual(dto.datosContacto.map(d => d.etiqueta), ['Teléfono', 'Correo', 'Horario']);
 });

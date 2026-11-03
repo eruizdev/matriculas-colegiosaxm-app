@@ -1,12 +1,13 @@
 const colegioRepository = require('../repositories/colegio.repository');
+const ColegioDto = require('../dtos/colegio.dto');
 
 class ColegioService {
   obtener() {
-    return colegioRepository.find();
+    return ColegioDto.desde(colegioRepository.find());
   }
 
   actualizar(data) {
-    return colegioRepository.update(data);
+    return ColegioDto.desde(colegioRepository.update(data));
   }
 }
 
