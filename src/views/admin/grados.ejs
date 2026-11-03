@@ -36,7 +36,7 @@
             <td><%= grado.orden %></td>
             <td><%= grado.nombre %></td>
             <td><%= grado.nivel %></td>
-            <td><%= grado.activo ? 'Activo' : 'Inactivo' %></td>
+            <td><%= grado.estado %></td>
             <td class="acciones-tabla">
               <form action="/admin/grados/<%= grado.id %>/estado" method="POST">
                 <button type="submit" class="btn btn-pequeno"><%= grado.activo ? 'Desactivar' : 'Activar' %></button>

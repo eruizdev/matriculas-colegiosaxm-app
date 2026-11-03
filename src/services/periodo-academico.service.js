@@ -1,10 +1,11 @@
 const periodoAcademicoRepository = require('../repositories/periodo-academico.repository');
 const cupoRepository = require('../repositories/cupo.repository');
+const PeriodoAcademicoDto = require('../dtos/periodo-academico.dto');
 const { ConflictError, NotFoundError } = require('../errors');
 
 class PeriodoAcademicoService {
   listar() {
-    return periodoAcademicoRepository.findAll();
+    return periodoAcademicoRepository.findAll().map(p => PeriodoAcademicoDto.desde(p));
   }
 
   obtener(id) {

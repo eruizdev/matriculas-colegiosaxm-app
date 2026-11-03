@@ -33,7 +33,7 @@
             <td><%= periodo.anio %></td>
             <td><%= periodo.fechaInicio %></td>
             <td><%= periodo.fechaFin %></td>
-            <td><%= periodo.activo ? 'Activo' : 'Inactivo' %></td>
+            <td><%= periodo.estado %></td>
             <td class="acciones-tabla">
               <% if (!periodo.activo) { %>
                 <form action="/admin/periodos/<%= periodo.id %>/activar" method="POST">

@@ -1,14 +1,15 @@
 const gradoRepository = require('../repositories/grado.repository');
 const cupoRepository = require('../repositories/cupo.repository');
+const GradoDto = require('../dtos/grado.dto');
 const { ConflictError, NotFoundError } = require('../errors');
 
 class GradoService {
   listar() {
-    return gradoRepository.findAll();
+    return gradoRepository.findAll().map(g => GradoDto.desde(g));
   }
 
   listarActivos() {
-    return gradoRepository.findAll().filter(g => g.activo);
+    return gradoRepository.findAll().filter(g => g.activo).map(g => GradoDto.desde(g));
   }
 
   obtener(id) {

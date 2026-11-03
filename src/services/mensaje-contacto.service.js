@@ -1,13 +1,10 @@
 const mensajeContactoRepository = require('../repositories/mensaje-contacto.repository');
-const FechaUtil = require('../utils/fecha.util');
+const MensajeContactoDto = require('../dtos/mensaje-contacto.dto');
 const NotFoundError = require('../errors/not-found-error');
 
 class MensajeContactoService {
   listar() {
-    return mensajeContactoRepository.findAll().map(m => ({
-      ...m,
-      fecha: FechaUtil.formatear(m.fecha)
-    }));
+    return mensajeContactoRepository.findAll().map(m => MensajeContactoDto.desde(m));
   }
 
   contarNoLeidos() {
