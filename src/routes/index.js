@@ -1,12 +1,11 @@
 const { Router } = require('express');
 const AuthMiddleware = require('../middlewares/auth.middleware');
 const RolMiddleware = require('../middlewares/rol.middleware');
-const Roles = require('../constants/roles');
+const { Permisos } = require('../constants/permisos');
 
 const router = Router();
 
-const soloPadres = [AuthMiddleware.verificarSesion, RolMiddleware.permitir(Roles.PADRE)];
-const soloAdmin = [AuthMiddleware.verificarSesion, RolMiddleware.permitir(Roles.ADMIN)];
+const puede = permiso => [AuthMiddleware.verificarSesion, RolMiddleware.requierePermiso(permiso)];
 
 router.use('/', require('./publico/inicio.routes'));
 router.use('/cupos', require('./publico/cupo.routes'));
@@ -16,16 +15,16 @@ router.use('/contacto', require('./publico/contacto.routes'));
 
 router.use('/auth', require('./auth/auth.routes'));
 
-router.use('/padre/perfil', soloPadres, require('./padre/perfil.routes'));
-router.use('/padre/cupos', soloPadres, require('./padre/cupo.routes'));
+router.use('/padre/perfil', puede(Permisos.EDITAR_PERFIL), require('./padre/perfil.routes'));
+router.use('/padre/cupos', puede(Permisos.VER_CUPOS_DETALLE), require('./padre/cupo.routes'));
 
-router.use('/admin', soloAdmin, require('./admin/dashboard.routes'));
-router.use('/admin/usuarios', soloAdmin, require('./admin/usuario.routes'));
-router.use('/admin/grados', soloAdmin, require('./admin/grado.routes'));
-router.use('/admin/cupos', soloAdmin, require('./admin/cupo.routes'));
-router.use('/admin/periodos', soloAdmin, require('./admin/periodo-academico.routes'));
-router.use('/admin/noticias', soloAdmin, require('./admin/noticia.routes'));
-router.use('/admin/requisitos', soloAdmin, require('./admin/requisito.routes'));
-router.use('/admin/mensajes', soloAdmin, require('./admin/mensaje-contacto.routes'));
+router.use('/admin', puede(Permisos.VER_PANEL), require('./admin/dashboard.routes'));
+router.use('/admin/usuarios', puede(Permisos.GESTIONAR_USUARIOS), require('./admin/usuario.routes'));
+router.use('/admin/cupos', puede(Permisos.GESTIONAR_CUPOS), require('./admin/cupo.routes'));
+router.use('/admin/grados', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/grado.routes'));
+router.use('/admin/periodos', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/periodo-academico.routes'));
+router.use('/admin/noticias', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/noticia.routes'));
+router.use('/admin/requisitos', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/requisito.routes'));
+router.use('/admin/mensajes', puede(Permisos.GESTIONAR_CONTENIDO), require('./admin/mensaje-contacto.routes'));
 
 module.exports = router;

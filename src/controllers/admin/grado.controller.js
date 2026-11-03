@@ -1,5 +1,6 @@
 const gradoService = require('../../services/grado.service');
 const GradoValidator = require('../../validators/grado.validator');
+const AppError = require('../../errors/app-error');
 
 class AdminGradoController {
   index(req, res) {
@@ -33,6 +34,10 @@ class AdminGradoController {
       gradoService.eliminar(req.params.id);
       res.redirect('/admin/grados');
     } catch (error) {
+      if (AppError.esDelCliente(error)) {
+        const grados = gradoService.listar();
+        return res.status(error.statusCode).render('admin/grados', { titulo: 'Grados', grados, errores: error.mensajes(), datos: {} });
+      }
       next(error);
     }
   }

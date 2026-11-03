@@ -232,6 +232,29 @@ a {
   color: #a12622;
 }
 
+.etiqueta-pocos {
+  background: #fff4dc;
+  color: #9a6400;
+}
+
+.barra {
+  width: 100px;
+  height: 8px;
+  background: #e3e6ec;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.barra-relleno {
+  height: 100%;
+  background: #1e5aa8;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .lista li {
   background: #fff;
   padding: 10px 15px;
@@ -247,6 +270,36 @@ a {
 
 .centrado {
   text-align: center;
+}
+
+.centrado-flex {
+  justify-content: center;
+}
+
+.codigo-error {
+  font-size: 72px;
+  margin: 0;
+  color: #1e5aa8;
+}
+
+.lista-detalles {
+  display: inline-block;
+  text-align: left;
+}
+
+.stack {
+  text-align: left;
+  background: #222;
+  color: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 12px;
+}
+
+.usuario-nav {
+  color: #dbe6f5;
+  font-size: 13px;
 }
 
 .admin {

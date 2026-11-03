@@ -16,11 +16,12 @@
       <a href="/noticias">Noticias</a>
       <a href="/contacto">Contacto</a>
       <% if (usuario) { %>
-        <% if (usuario.rol === 'admin') { %>
+        <% if (esAdmin) { %>
           <a href="/admin">Panel</a>
-        <% } else { %>
+        <% } else if (esPadre) { %>
           <a href="/padre/perfil">Mi perfil</a>
         <% } %>
+        <span class="usuario-nav"><%= usuario.nombre %> · <%= usuario.nombreRol %></span>
         <a href="/auth/logout">Salir</a>
       <% } else { %>
         <a href="/auth/login">Ingresar</a>

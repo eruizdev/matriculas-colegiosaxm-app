@@ -1,43 +1,52 @@
 const usuarioRepository = require('../repositories/usuario.repository');
 const UsuarioDto = require('../dtos/usuario.dto');
 const PasswordUtil = require('../utils/password.util');
-const AppError = require('../errors/app-error');
-const NotFoundError = require('../errors/not-found-error');
-const UnauthorizedError = require('../errors/unauthorized-error');
+const RolUtil = require('../utils/rol.util');
+const { BadRequestError, ConflictError, ForbiddenError, NotFoundError, UnauthorizedError } = require('../errors');
 const Roles = require('../constants/roles');
 
 class AuthService {
-  async registrar(data) {
+  async crearUsuario(data, rol) {
+    if (!RolUtil.esValido(rol)) throw new BadRequestError('El rol no es válido');
+
     const telefono = data.telefono.trim();
 
     if (usuarioRepository.existeCorreo(data.correo)) {
-      throw new AppError('Ya existe una cuenta con ese correo', 400);
+      throw new ConflictError('Ya existe una cuenta con ese correo');
     }
     if (usuarioRepository.existeTelefono(telefono)) {
-      throw new AppError('Ya existe una cuenta con ese número de teléfono', 400);
+      throw new ConflictError('Ya existe una cuenta con ese número de teléfono');
     }
 
     const password = await PasswordUtil.encriptar(data.password);
-    const usuario = usuarioRepository.create({
+    return usuarioRepository.create({
       nombre: data.nombre.trim(),
       telefono,
       correo: data.correo,
       password,
-      rol: Roles.PADRE
+      rol
     });
+  }
 
+  async registrar(data) {
+    const usuario = await this.crearUsuario(data, Roles.PADRE);
     usuario.registrarAcceso();
+    return UsuarioDto.desde(usuario);
+  }
+
+  async crearAdmin(data) {
+    const usuario = await this.crearUsuario(data, Roles.ADMIN);
     return UsuarioDto.desde(usuario);
   }
 
   async login(correo, password) {
     const usuario = usuarioRepository.findByCorreo(correo);
-    if (!usuario) throw new UnauthorizedError();
+    if (!usuario) throw new UnauthorizedError('Correo o contraseña incorrectos');
 
     const valido = await PasswordUtil.comparar(password, usuario.password);
-    if (!valido) throw new UnauthorizedError();
+    if (!valido) throw new UnauthorizedError('Correo o contraseña incorrectos');
 
-    if (!usuario.activo) throw new AppError('Tu cuenta está desactivada', 403);
+    if (!usuario.activo) throw new ForbiddenError('Tu cuenta está desactivada, comunícate con el colegio');
 
     usuario.registrarAcceso();
     return UsuarioDto.desde(usuario);
@@ -48,7 +57,7 @@ class AuthService {
     if (!usuario) throw new NotFoundError('Usuario no encontrado');
 
     const valido = await PasswordUtil.comparar(passwordActual, usuario.password);
-    if (!valido) throw new AppError('La contraseña actual no es correcta', 400);
+    if (!valido) throw new BadRequestError('La contraseña actual no es correcta');
 
     const password = await PasswordUtil.encriptar(passwordNueva);
     usuarioRepository.update(id, { password });

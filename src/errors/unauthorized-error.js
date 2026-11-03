@@ -1,7 +1,7 @@
 const AppError = require('./app-error');
 
 class UnauthorizedError extends AppError {
-  constructor(mensaje = 'Correo o contraseña incorrectos') {
+  constructor(mensaje = 'Debes iniciar sesión para continuar') {
     super(mensaje, 401);
   }
 }

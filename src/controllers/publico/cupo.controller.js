@@ -3,10 +3,10 @@ const periodoAcademicoService = require('../../services/periodo-academico.servic
 
 class CupoController {
   index(req, res) {
-    const cupos = cupoService.listarDisponibles();
+    const resumen = cupoService.resumenPorGrado();
     const periodo = periodoAcademicoService.obtenerActivo();
 
-    res.render('publico/cupos', { titulo: 'Cupos', cupos, periodo });
+    res.render('publico/cupos', { titulo: 'Cupos', resumen, periodo });
   }
 }
 

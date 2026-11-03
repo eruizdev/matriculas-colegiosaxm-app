@@ -3,10 +3,33 @@
 <div class="admin">
   <%- include('../partials/admin-menu') %>
   <section class="admin-contenido">
-    <h1>Padres registrados</h1>
+    <h1>Usuarios</h1>
+
+    <%- include('../partials/mensajes') %>
+
+    <h2>Crear administrador</h2>
+    <form action="/admin/usuarios" method="POST" class="formulario formulario-linea">
+      <input type="text" name="nombre" placeholder="Nombre" value="<%= datos.nombre || '' %>">
+      <input type="tel" name="telefono" placeholder="Teléfono" value="<%= datos.telefono || '' %>">
+      <input type="email" name="correo" placeholder="Correo" value="<%= datos.correo || '' %>">
+      <input type="password" name="password" placeholder="Contraseña">
+      <input type="password" name="confirmarPassword" placeholder="Confirmar">
+      <button type="submit" class="btn">Crear</button>
+    </form>
+
+    <h2>Listado</h2>
+    <form action="/admin/usuarios" method="GET" class="filtro">
+      <select name="rol">
+        <option value="">Todos los roles</option>
+        <% roles.forEach(rol => { %>
+          <option value="<%= rol.valor %>" <%= rol.valor === filtroRol ? 'selected' : '' %>><%= rol.nombre %></option>
+        <% }) %>
+      </select>
+      <button type="submit" class="btn">Filtrar</button>
+    </form>
 
     <% if (usuarios.length === 0) { %>
-      <p>Todavía no hay padres registrados.</p>
+      <p>No hay usuarios con ese rol.</p>
     <% } else { %>
       <table class="tabla">
         <thead>
@@ -14,6 +37,7 @@
             <th>Nombre</th>
             <th>Correo</th>
             <th>Teléfono</th>
+            <th>Rol</th>
             <th>Registro</th>
             <th>Último acceso</th>
             <th>Estado</th>
@@ -22,17 +46,34 @@
         </thead>
         <tbody>
           <% usuarios.forEach(u => { %>
+            <% const esYo = u.id === usuario.id; %>
             <tr>
-              <td><%= u.nombre %></td>
+              <td><%= u.nombre %><%= esYo ? ' (tú)' : '' %></td>
               <td><%= u.correo %></td>
               <td><%= u.telefono %></td>
+              <td>
+                <% if (esYo) { %>
+                  <%= u.nombreRol %>
+                <% } else { %>
+                  <form action="/admin/usuarios/<%= u.id %>/rol" method="POST" class="formulario-linea" data-confirmar="¿Cambiar el rol de <%= u.nombre %>?">
+                    <select name="rol">
+                      <% roles.forEach(rol => { %>
+                        <option value="<%= rol.valor %>" <%= rol.valor === u.rol ? 'selected' : '' %>><%= rol.nombre %></option>
+                      <% }) %>
+                    </select>
+                    <button type="submit" class="btn btn-pequeno">Cambiar</button>
+                  </form>
+                <% } %>
+              </td>
               <td><%= u.fechaRegistro %></td>
               <td><%= u.ultimoAcceso %></td>
               <td><%= u.activo ? 'Activo' : 'Inactivo' %></td>
               <td>
-                <form action="/admin/usuarios/<%= u.id %>/estado" method="POST">
-                  <button type="submit" class="btn btn-pequeno"><%= u.activo ? 'Desactivar' : 'Activar' %></button>
-                </form>
+                <% if (!esYo) { %>
+                  <form action="/admin/usuarios/<%= u.id %>/estado" method="POST">
+                    <button type="submit" class="btn btn-pequeno <%= u.activo ? 'btn-peligro' : '' %>"><%= u.activo ? 'Desactivar' : 'Activar' %></button>
+                  </form>
+                <% } %>
               </td>
             </tr>
           <% }) %>

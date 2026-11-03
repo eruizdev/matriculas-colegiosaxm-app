@@ -1,5 +1,6 @@
 const gradoRepository = require('../repositories/grado.repository');
-const NotFoundError = require('../errors/not-found-error');
+const cupoRepository = require('../repositories/cupo.repository');
+const { ConflictError, NotFoundError } = require('../errors');
 
 class GradoService {
   listar() {
@@ -31,6 +32,9 @@ class GradoService {
 
   eliminar(id) {
     this.obtener(id);
+    if (cupoRepository.findByGrado(id).length > 0) {
+      throw new ConflictError('No se puede eliminar un grado que tiene cupos, elimina primero sus cupos');
+    }
     return gradoRepository.delete(id);
   }
 }

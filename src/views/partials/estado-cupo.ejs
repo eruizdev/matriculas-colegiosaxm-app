@@ -1,0 +1,2 @@
+<% const clases = { 'Disponible': 'etiqueta-ok', 'Pocos cupos': 'etiqueta-pocos', 'Agotado': 'etiqueta-no' }; %>
+<span class="etiqueta <%= clases[estado] || '' %>"><%= estado %></span>

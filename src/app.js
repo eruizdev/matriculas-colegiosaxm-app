@@ -4,6 +4,7 @@ const path = require('path');
 const Session = require('./config/session');
 const routes = require('./routes');
 const ErrorMiddleware = require('./middlewares/error.middleware');
+const AuthMiddleware = require('./middlewares/auth.middleware');
 
 class App {
   constructor() {
@@ -20,10 +21,7 @@ class App {
     this.app.use(express.json());
     this.app.use(express.static(path.join(__dirname, '..', 'public')));
     this.app.use(session(Session.getOptions()));
-    this.app.use((req, res, next) => {
-      res.locals.usuario = req.session.usuario || null;
-      next();
-    });
+    this.app.use(AuthMiddleware.cargarUsuario);
   }
 
   rutas() {

@@ -1,4 +1,5 @@
 const Roles = require('../constants/roles');
+const RolUtil = require('../utils/rol.util');
 
 class Usuario {
   constructor({ id, nombre, telefono, correo, password, rol = Roles.PADRE, activo = true, fechaRegistro = new Date(), ultimoAcceso = null }) {
@@ -19,6 +20,10 @@ class Usuario {
 
   esPadre() {
     return this.rol === Roles.PADRE;
+  }
+
+  tienePermiso(permiso) {
+    return RolUtil.tienePermiso(this.rol, permiso);
   }
 
   registrarAcceso() {

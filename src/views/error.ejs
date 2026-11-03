@@ -1,9 +1,28 @@
 <%- include('layouts/header') %>
 
-<section class="centrado">
-  <h1><%= status %></h1>
+<section class="centrado pagina-error">
+  <h1 class="codigo-error"><%= status %></h1>
+  <h2><%= tituloError %></h2>
   <p><%= mensaje %></p>
-  <a href="/" class="btn">Volver al inicio</a>
+
+  <% if (detalles && detalles.length > 0) { %>
+    <ul class="lista-detalles">
+      <% detalles.forEach(detalle => { %>
+        <li><%= detalle %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <div class="acciones centrado-flex">
+    <% if (status === 401 || (status === 403 && !usuario)) { %>
+      <a href="/auth/login" class="btn">Iniciar sesión</a>
+    <% } %>
+    <a href="/" class="btn btn-secundario">Volver al inicio</a>
+  </div>
+
+  <% if (stack) { %>
+    <pre class="stack"><%= stack %></pre>
+  <% } %>
 </section>
 
 <%- include('layouts/footer') %>

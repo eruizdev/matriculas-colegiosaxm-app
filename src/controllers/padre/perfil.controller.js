@@ -26,8 +26,8 @@ class PadrePerfilController {
       req.session.usuario = perfil;
       res.render('padre/perfil', { titulo: 'Mi perfil', perfil, exito: 'Datos actualizados' });
     } catch (error) {
-      if (error instanceof AppError && error.statusCode === 400) {
-        return res.status(400).render('padre/perfil', { titulo: 'Mi perfil', perfil: usuarioService.obtener(id), errores: [error.message] });
+      if (AppError.esDelCliente(error)) {
+        return res.status(error.statusCode).render('padre/perfil', { titulo: 'Mi perfil', perfil: usuarioService.obtener(id), errores: error.mensajes() });
       }
       next(error);
     }
@@ -44,8 +44,8 @@ class PadrePerfilController {
       await authService.cambiarPassword(id, req.body.passwordActual, req.body.passwordNueva);
       res.render('padre/perfil', { titulo: 'Mi perfil', perfil: usuarioService.obtener(id), exito: 'Contraseña actualizada' });
     } catch (error) {
-      if (error instanceof AppError && error.statusCode === 400) {
-        return res.status(400).render('padre/perfil', { titulo: 'Mi perfil', perfil: usuarioService.obtener(id), errores: [error.message] });
+      if (AppError.esDelCliente(error)) {
+        return res.status(error.statusCode).render('padre/perfil', { titulo: 'Mi perfil', perfil: usuarioService.obtener(id), errores: error.mensajes() });
       }
       next(error);
     }

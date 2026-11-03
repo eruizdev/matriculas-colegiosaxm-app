@@ -11,7 +11,13 @@
     <select name="gradoId">
       <option value="">Todos los grados</option>
       <% grados.forEach(grado => { %>
-        <option value="<%= grado.id %>" <%= String(grado.id) === gradoId ? 'selected' : '' %>><%= grado.nombre %></option>
+        <option value="<%= grado.id %>" <%= String(grado.id) === filtros.gradoId ? 'selected' : '' %>><%= grado.nombre %></option>
+      <% }) %>
+    </select>
+    <select name="jornada">
+      <option value="">Todas las jornadas</option>
+      <% jornadas.forEach(jornada => { %>
+        <option value="<%= jornada %>" <%= jornada === filtros.jornada ? 'selected' : '' %>><%= jornada %></option>
       <% }) %>
     </select>
     <button type="submit" class="btn">Filtrar</button>
@@ -27,6 +33,9 @@
           <th>Jornada</th>
           <th>Total</th>
           <th>Disponibles</th>
+          <th>Ocupación</th>
+          <th>Estado</th>
+          <th>Actualizado</th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +44,13 @@
             <td><%= cupo.grado %></td>
             <td><%= cupo.jornada %></td>
             <td><%= cupo.total %></td>
-            <td><%= cupo.disponibles %></td>
+            <td><strong><%= cupo.disponibles %></strong></td>
+            <td>
+              <div class="barra"><div class="barra-relleno" style="width: <%= cupo.porcentaje %>%"></div></div>
+              <small><%= cupo.porcentaje %>%</small>
+            </td>
+            <td><%- include('../partials/estado-cupo', { estado: cupo.estado }) %></td>
+            <td><small><%= cupo.actualizado %></small></td>
           </tr>
         <% }) %>
       </tbody>

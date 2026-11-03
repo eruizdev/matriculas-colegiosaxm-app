@@ -1,57 +1,71 @@
 const authService = require('../../services/auth.service');
 const AppError = require('../../errors/app-error');
-const Roles = require('../../constants/roles');
+const RolUtil = require('../../utils/rol.util');
 
 class AuthController {
-  mostrarLogin(req, res) {
-    res.render('auth/login', { titulo: 'Ingresar', datos: {} });
+  iniciarSesion(req, usuario) {
+    const volverA = req.session.volverA;
+
+    return new Promise((resolve, reject) => {
+      req.session.regenerate(error => {
+        if (error) return reject(error);
+        req.session.usuario = usuario;
+
+        const destino = volverA && RolUtil.puedeEntrar(usuario.rol, volverA)
+          ? volverA
+          : RolUtil.rutaInicio(usuario.rol);
+        resolve(destino);
+      });
+    });
   }
 
-  async login(req, res, next) {
+  mostrarLogin = (req, res) => {
+    res.render('auth/login', { titulo: 'Ingresar', datos: {} });
+  };
+
+  login = async (req, res, next) => {
     try {
       const usuario = await authService.login(req.body.correo, req.body.password);
-      req.session.usuario = usuario;
-
-      if (usuario.rol === Roles.ADMIN) return res.redirect('/admin');
-      res.redirect('/padre/perfil');
+      const destino = await this.iniciarSesion(req, usuario);
+      res.redirect(destino);
     } catch (error) {
-      if (error instanceof AppError) {
+      if (AppError.esDelCliente(error)) {
         return res.status(error.statusCode).render('auth/login', {
           titulo: 'Ingresar',
-          errores: [error.message],
+          errores: error.mensajes(),
           datos: { correo: req.body.correo }
         });
       }
       next(error);
     }
-  }
+  };
 
-  mostrarRegistro(req, res) {
+  mostrarRegistro = (req, res) => {
     res.render('auth/registro', { titulo: 'Registro', datos: {} });
-  }
+  };
 
-  async registro(req, res, next) {
+  registro = async (req, res, next) => {
     try {
       const usuario = await authService.registrar(req.body);
-      req.session.usuario = usuario;
-      res.redirect('/padre/perfil');
+      const destino = await this.iniciarSesion(req, usuario);
+      res.redirect(destino);
     } catch (error) {
-      if (error instanceof AppError) {
+      if (AppError.esDelCliente(error)) {
         return res.status(error.statusCode).render('auth/registro', {
           titulo: 'Registro',
-          errores: [error.message],
+          errores: error.mensajes(),
           datos: { nombre: req.body.nombre, telefono: req.body.telefono, correo: req.body.correo }
         });
       }
       next(error);
     }
-  }
+  };
 
-  logout(req, res) {
+  logout = (req, res) => {
     req.session.destroy(() => {
       res.redirect('/');
     });
-  }
+  };
 }
 
 module.exports = new AuthController();

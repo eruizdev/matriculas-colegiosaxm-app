@@ -22,6 +22,22 @@ class CupoRepository {
     return this.cupos.filter(c => c.gradoId === Number(gradoId));
   }
 
+  findByFiltros({ periodoId, gradoId, jornada } = {}) {
+    return this.cupos.filter(c =>
+      (!periodoId || c.periodoId === Number(periodoId)) &&
+      (!gradoId || c.gradoId === Number(gradoId)) &&
+      (!jornada || c.jornada === jornada)
+    );
+  }
+
+  existe(gradoId, periodoId, jornada) {
+    return this.cupos.some(c =>
+      c.gradoId === Number(gradoId) &&
+      c.periodoId === Number(periodoId) &&
+      c.jornada === jornada
+    );
+  }
+
   create(data) {
     const cupo = new Cupo({ ...data, id: this.siguienteId++ });
     this.cupos.push(cupo);
@@ -31,7 +47,7 @@ class CupoRepository {
   update(id, data) {
     const cupo = this.findById(id);
     if (!cupo) return null;
-    Object.assign(cupo, data);
+    Object.assign(cupo, data, { fechaActualizacion: new Date() });
     return cupo;
   }
 

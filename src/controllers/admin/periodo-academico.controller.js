@@ -1,4 +1,5 @@
 const periodoAcademicoService = require('../../services/periodo-academico.service');
+const AppError = require('../../errors/app-error');
 
 class AdminPeriodoAcademicoController {
   index(req, res) {
@@ -34,6 +35,10 @@ class AdminPeriodoAcademicoController {
       periodoAcademicoService.eliminar(req.params.id);
       res.redirect('/admin/periodos');
     } catch (error) {
+      if (AppError.esDelCliente(error)) {
+        const periodos = periodoAcademicoService.listar();
+        return res.status(error.statusCode).render('admin/periodos', { titulo: 'Periodos académicos', periodos, errores: error.mensajes(), datos: {} });
+      }
       next(error);
     }
   }

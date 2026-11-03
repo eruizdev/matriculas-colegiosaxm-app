@@ -6,6 +6,8 @@ const router = Router();
 router.get('/', cupoController.index);
 router.post('/', cupoController.crear);
 router.post('/:id/actualizar', cupoController.actualizar);
+router.post('/:id/ocupar', cupoController.ocupar);
+router.post('/:id/liberar', cupoController.liberar);
 router.post('/:id/eliminar', cupoController.eliminar);
 
 module.exports = router;

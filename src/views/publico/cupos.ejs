@@ -4,7 +4,7 @@
 
 <% if (!periodo) { %>
   <p>No hay un periodo de matrículas abierto.</p>
-<% } else if (cupos.length === 0) { %>
+<% } else if (resumen.length === 0) { %>
   <p>Todavía no se han publicado cupos para <%= periodo.nombre %>.</p>
 <% } else { %>
   <p>Periodo: <strong><%= periodo.nombre %></strong></p>
@@ -12,18 +12,24 @@
     <thead>
       <tr>
         <th>Grado</th>
-        <th>Jornada</th>
-        <th>Estado</th>
+        <th>Nivel</th>
+        <th>Jornadas</th>
+        <th>Estado general</th>
       </tr>
     </thead>
     <tbody>
-      <% cupos.forEach(cupo => { %>
+      <% resumen.forEach(item => { %>
         <tr>
-          <td><%= cupo.grado %></td>
-          <td><%= cupo.jornada %></td>
+          <td><%= item.grado %></td>
+          <td><%= item.nivel %></td>
           <td>
-            <% if (cupo.hayDisponibles) { %>
-              <span class="etiqueta etiqueta-ok">Disponible</span>
+            <% item.jornadas.forEach(j => { %>
+              <div><%= j.jornada %>: <%- include('../partials/estado-cupo', { estado: j.estado }) %></div>
+            <% }) %>
+          </td>
+          <td>
+            <% if (item.hayDisponibles) { %>
+              <span class="etiqueta etiqueta-ok">Con cupos</span>
             <% } else { %>
               <span class="etiqueta etiqueta-no">Sin cupos</span>
             <% } %>
@@ -33,7 +39,9 @@
     </tbody>
   </table>
   <% if (!usuario) { %>
-    <p><a href="/auth/registro">Regístrate</a> para ver la cantidad exacta de cupos por grado.</p>
+    <p><a href="/auth/registro">Regístrate</a> para ver la cantidad exacta de cupos por grado y jornada.</p>
+  <% } else if (esPadre) { %>
+    <p><a href="/padre/cupos">Ver la cantidad exacta de cupos</a></p>
   <% } %>
 <% } %>
 

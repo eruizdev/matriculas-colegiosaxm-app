@@ -1,5 +1,6 @@
 const periodoAcademicoRepository = require('../repositories/periodo-academico.repository');
-const NotFoundError = require('../errors/not-found-error');
+const cupoRepository = require('../repositories/cupo.repository');
+const { ConflictError, NotFoundError } = require('../errors');
 
 class PeriodoAcademicoService {
   listar() {
@@ -34,6 +35,9 @@ class PeriodoAcademicoService {
 
   eliminar(id) {
     this.obtener(id);
+    if (cupoRepository.findByPeriodo(id).length > 0) {
+      throw new ConflictError('No se puede eliminar un periodo que tiene cupos, elimina primero sus cupos');
+    }
     return periodoAcademicoRepository.delete(id);
   }
 }

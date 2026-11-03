@@ -7,10 +7,13 @@ const periodoAcademicoService = require('../../services/periodo-academico.servic
 
 class AdminDashboardController {
   index(req, res) {
+    const cupos = cupoService.totales();
     const resumen = {
       padres: usuarioService.contarPadres(),
       grados: gradoService.listar().length,
-      cuposDisponibles: cupoService.totalDisponibles(),
+      cuposTotales: cupos.total,
+      cuposOcupados: cupos.ocupados,
+      cuposDisponibles: cupos.disponibles,
       noticias: noticiaService.listar().length,
       mensajesNoLeidos: mensajeContactoService.contarNoLeidos()
     };
