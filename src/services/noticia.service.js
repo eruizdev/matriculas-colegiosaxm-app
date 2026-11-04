@@ -12,6 +12,12 @@ class NoticiaService {
     return limite ? noticias.slice(0, limite) : noticias;
   }
 
+  obtener(id) {
+    const noticia = noticiaRepository.findById(id);
+    if (!noticia) throw new NotFoundError('Noticia no encontrada');
+    return noticia;
+  }
+
   obtenerPublicada(id) {
     const noticia = noticiaRepository.findById(id);
     if (!noticia || !noticia.publicada) throw new NotFoundError('Noticia no encontrada');
@@ -26,15 +32,24 @@ class NoticiaService {
     });
   }
 
+  actualizar(id, data) {
+    this.obtener(id);
+    return noticiaRepository.update(id, {
+      titulo: data.titulo.trim(),
+      contenido: data.contenido.trim(),
+      publicada: data.publicada === 'on'
+    });
+  }
+
   cambiarEstado(id) {
-    const noticia = noticiaRepository.findById(id);
-    if (!noticia) throw new NotFoundError('Noticia no encontrada');
+    const noticia = this.obtener(id);
     noticia.cambiarEstado();
+    return noticia;
   }
 
   eliminar(id) {
-    const eliminada = noticiaRepository.delete(id);
-    if (!eliminada) throw new NotFoundError('Noticia no encontrada');
+    this.obtener(id);
+    return noticiaRepository.delete(id);
   }
 }
 
