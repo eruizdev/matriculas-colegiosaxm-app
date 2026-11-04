@@ -27,6 +27,16 @@ class PeriodoAcademicoService {
     });
   }
 
+  actualizar(id, data) {
+    this.obtener(id);
+    return periodoAcademicoRepository.update(id, {
+      nombre: data.nombre.trim(),
+      anio: Number(data.anio),
+      fechaInicio: data.fechaInicio || null,
+      fechaFin: data.fechaFin || null
+    });
+  }
+
   activar(id) {
     this.obtener(id);
     periodoAcademicoRepository.findAll().forEach(p => {
