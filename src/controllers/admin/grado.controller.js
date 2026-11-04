@@ -1,22 +1,36 @@
 const gradoService = require('../../services/grado.service');
 const GradoValidator = require('../../validators/grado.validator');
 const AppError = require('../../errors/app-error');
+const Nivel = require('../../constants/nivel');
+
+const mostrar = (res, extra = {}, status = 200) => {
+  res.status(status).render('admin/grados', {
+    titulo: 'Grados',
+    grados: gradoService.listar(),
+    niveles: Object.values(Nivel),
+    datos: {},
+    ...extra
+  });
+};
 
 class AdminGradoController {
   index(req, res) {
-    const grados = gradoService.listar();
-    res.render('admin/grados', { titulo: 'Grados', grados, datos: {} });
+    mostrar(res);
   }
 
-  crear(req, res) {
+  crear(req, res, next) {
     const errores = GradoValidator.validar(req.body);
-    if (errores.length > 0) {
-      const grados = gradoService.listar();
-      return res.status(400).render('admin/grados', { titulo: 'Grados', grados, errores, datos: req.body });
-    }
+    if (errores.length > 0) return mostrar(res, { errores, datos: req.body }, 400);
 
-    gradoService.crear(req.body);
-    res.redirect('/admin/grados');
+    try {
+      gradoService.crear(req.body);
+      res.redirect('/admin/grados');
+    } catch (error) {
+      if (AppError.esDelCliente(error)) {
+        return mostrar(res, { errores: error.mensajes(), datos: req.body }, error.statusCode);
+      }
+      next(error);
+    }
   }
 
   cambiarEstado(req, res, next) {
@@ -34,8 +48,7 @@ class AdminGradoController {
       res.redirect('/admin/grados');
     } catch (error) {
       if (AppError.esDelCliente(error)) {
-        const grados = gradoService.listar();
-        return res.status(error.statusCode).render('admin/grados', { titulo: 'Grados', grados, errores: error.mensajes(), datos: {} });
+        return mostrar(res, { errores: error.mensajes() }, error.statusCode);
       }
       next(error);
     }

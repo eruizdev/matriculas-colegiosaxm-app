@@ -11,10 +11,9 @@
       <input type="text" name="nombre" placeholder="Nombre (ej: Primero)" value="<%= datos.nombre || '' %>">
       <select name="nivel">
         <option value="">Nivel</option>
-        <option value="Preescolar">Preescolar</option>
-        <option value="Primaria">Primaria</option>
-        <option value="Secundaria">Secundaria</option>
-        <option value="Media">Media</option>
+        <% niveles.forEach(nivel => { %>
+          <option value="<%= nivel %>" <%= datos.nivel === nivel ? 'selected' : '' %>><%= nivel %></option>
+        <% }) %>
       </select>
       <input type="number" name="orden" placeholder="Orden" value="<%= datos.orden || '' %>">
       <button type="submit" class="btn">Agregar</button>
