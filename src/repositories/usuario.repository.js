@@ -1,29 +1,21 @@
+const BaseRepository = require('./base.repository');
 const Usuario = require('../models/usuario.model');
 
-class UsuarioRepository {
+class UsuarioRepository extends BaseRepository {
   constructor() {
-    this.usuarios = [];
-    this.siguienteId = 1;
-  }
-
-  findAll() {
-    return this.usuarios;
-  }
-
-  findById(id) {
-    return this.usuarios.find(u => u.id === Number(id));
+    super(Usuario);
   }
 
   findByCorreo(correo) {
-    return this.usuarios.find(u => u.correo === correo.trim().toLowerCase());
+    return this.findOneBy(u => u.correo === correo.trim().toLowerCase());
   }
 
   findByTelefono(telefono) {
-    return this.usuarios.find(u => u.telefono === telefono);
+    return this.findOneBy(u => u.telefono === telefono);
   }
 
   findByRol(rol) {
-    return this.usuarios.filter(u => u.rol === rol);
+    return this.findBy(u => u.rol === rol);
   }
 
   existeCorreo(correo) {
@@ -36,27 +28,7 @@ class UsuarioRepository {
   }
 
   create(data) {
-    const usuario = new Usuario({
-      ...data,
-      id: this.siguienteId++,
-      correo: data.correo.trim().toLowerCase()
-    });
-    this.usuarios.push(usuario);
-    return usuario;
-  }
-
-  update(id, data) {
-    const usuario = this.findById(id);
-    if (!usuario) return null;
-    Object.assign(usuario, data);
-    return usuario;
-  }
-
-  delete(id) {
-    const index = this.usuarios.findIndex(u => u.id === Number(id));
-    if (index === -1) return false;
-    this.usuarios.splice(index, 1);
-    return true;
+    return super.create({ ...data, correo: data.correo.trim().toLowerCase() });
   }
 }
 

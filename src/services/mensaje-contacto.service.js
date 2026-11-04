@@ -8,7 +8,7 @@ class MensajeContactoService {
   }
 
   contarNoLeidos() {
-    return mensajeContactoRepository.findNoLeidos().length;
+    return mensajeContactoRepository.contarNoLeidos();
   }
 
   enviar(data) {

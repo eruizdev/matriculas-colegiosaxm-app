@@ -1,29 +1,21 @@
+const BaseRepository = require('./base.repository');
 const Cupo = require('../models/cupo.model');
 
-class CupoRepository {
+class CupoRepository extends BaseRepository {
   constructor() {
-    this.cupos = [];
-    this.siguienteId = 1;
-  }
-
-  findAll() {
-    return this.cupos;
-  }
-
-  findById(id) {
-    return this.cupos.find(c => c.id === Number(id));
+    super(Cupo);
   }
 
   findByPeriodo(periodoId) {
-    return this.cupos.filter(c => c.periodoId === Number(periodoId));
+    return this.findBy(c => c.periodoId === Number(periodoId));
   }
 
   findByGrado(gradoId) {
-    return this.cupos.filter(c => c.gradoId === Number(gradoId));
+    return this.findBy(c => c.gradoId === Number(gradoId));
   }
 
   findByFiltros({ periodoId, gradoId, jornada } = {}) {
-    return this.cupos.filter(c =>
+    return this.findBy(c =>
       (!periodoId || c.periodoId === Number(periodoId)) &&
       (!gradoId || c.gradoId === Number(gradoId)) &&
       (!jornada || c.jornada === jornada)
@@ -31,31 +23,15 @@ class CupoRepository {
   }
 
   existe(gradoId, periodoId, jornada) {
-    return this.cupos.some(c =>
+    return this.registros.some(c =>
       c.gradoId === Number(gradoId) &&
       c.periodoId === Number(periodoId) &&
       c.jornada === jornada
     );
   }
 
-  create(data) {
-    const cupo = new Cupo({ ...data, id: this.siguienteId++ });
-    this.cupos.push(cupo);
-    return cupo;
-  }
-
   update(id, data) {
-    const cupo = this.findById(id);
-    if (!cupo) return null;
-    Object.assign(cupo, data, { fechaActualizacion: new Date() });
-    return cupo;
-  }
-
-  delete(id) {
-    const index = this.cupos.findIndex(c => c.id === Number(id));
-    if (index === -1) return false;
-    this.cupos.splice(index, 1);
-    return true;
+    return super.update(id, { ...data, fechaActualizacion: new Date() });
   }
 }
 

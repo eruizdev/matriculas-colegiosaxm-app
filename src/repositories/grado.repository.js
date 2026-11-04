@@ -1,37 +1,22 @@
+const BaseRepository = require('./base.repository');
 const Grado = require('../models/grado.model');
 
-class GradoRepository {
+class GradoRepository extends BaseRepository {
   constructor() {
-    this.grados = [];
-    this.siguienteId = 1;
+    super(Grado);
   }
 
-  findAll() {
-    return [...this.grados].sort((a, b) => a.orden - b.orden);
+  ordenar(grados) {
+    return grados.sort((a, b) => a.orden - b.orden);
   }
 
-  findById(id) {
-    return this.grados.find(g => g.id === Number(id));
+  findActivos() {
+    return this.findBy(g => g.activo);
   }
 
-  create(data) {
-    const grado = new Grado({ ...data, id: this.siguienteId++ });
-    this.grados.push(grado);
-    return grado;
-  }
-
-  update(id, data) {
-    const grado = this.findById(id);
-    if (!grado) return null;
-    Object.assign(grado, data);
-    return grado;
-  }
-
-  delete(id) {
-    const index = this.grados.findIndex(g => g.id === Number(id));
-    if (index === -1) return false;
-    this.grados.splice(index, 1);
-    return true;
+  existeNombre(nombre, excluirId) {
+    const buscado = nombre.trim().toLowerCase();
+    return this.registros.some(g => g.nombre.toLowerCase() === buscado && g.id !== Number(excluirId));
   }
 }
 

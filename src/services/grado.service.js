@@ -9,7 +9,7 @@ class GradoService {
   }
 
   listarActivos() {
-    return gradoRepository.findAll().filter(g => g.activo).map(g => GradoDto.desde(g));
+    return gradoRepository.findActivos().map(g => GradoDto.desde(g));
   }
 
   obtener(id) {
