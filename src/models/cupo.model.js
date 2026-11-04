@@ -45,6 +45,14 @@ class Cupo {
     this.fechaActualizacion = new Date();
     return true;
   }
+
+  actualizar({ total, ocupados = 0 }) {
+    if (total < 1 || ocupados < 0 || ocupados > total) return false;
+    this.total = total;
+    this.ocupados = ocupados;
+    this.fechaActualizacion = new Date();
+    return true;
+  }
 }
 
 module.exports = Cupo;

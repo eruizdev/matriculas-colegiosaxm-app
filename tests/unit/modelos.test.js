@@ -7,6 +7,7 @@ const MensajeContacto = require('../../src/models/mensaje-contacto.model');
 const Requisito = require('../../src/models/requisito.model');
 const Usuario = require('../../src/models/usuario.model');
 const Colegio = require('../../src/models/colegio.model');
+const ResumenGrado = require('../../src/models/resumen-grado.model');
 const ColegioValidator = require('../../src/validators/colegio.validator');
 const Roles = require('../../src/constants/roles');
 
@@ -94,4 +95,16 @@ test('colegio se actualiza y sabe si tiene datos de contacto', () => {
 test('validador del colegio', () => {
   assert.deepStrictEqual(ColegioValidator.validar({ nombre: 'Colegio Central' }), []);
   assert.strictEqual(ColegioValidator.validar({ nombre: 'C', telefono: '12', correo: 'malo' }).length, 3);
+});
+
+test('resumen de grado suma cupos y dice si hay disponibles', () => {
+  const resumen = new ResumenGrado({ gradoId: 1, grado: 'Primero', nivel: 'Primaria' });
+  assert.strictEqual(resumen.hayDisponibles(), false);
+  resumen.agregar({ jornada: 'Mañana', total: 30, disponibles: 0, estado: 'Agotado' });
+  assert.strictEqual(resumen.hayDisponibles(), false);
+  resumen.agregar({ jornada: 'Tarde', total: 20, disponibles: 4, estado: 'Pocos cupos' });
+  assert.strictEqual(resumen.total, 50);
+  assert.strictEqual(resumen.disponibles, 4);
+  assert.strictEqual(resumen.jornadas.length, 2);
+  assert.strictEqual(resumen.hayDisponibles(), true);
 });

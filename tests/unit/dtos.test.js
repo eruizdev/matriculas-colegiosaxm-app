@@ -16,6 +16,7 @@ const CupoDisponibleDto = require('../../src/dtos/cupo-disponible.dto');
 const ResumenGradoDto = require('../../src/dtos/resumen-grado.dto');
 const TotalesCupoDto = require('../../src/dtos/totales-cupo.dto');
 const Cupo = require('../../src/models/cupo.model');
+const ResumenGrado = require('../../src/models/resumen-grado.model');
 
 test('GradoDto arma nombre completo y estado', () => {
   const dto = GradoDto.desde(new Grado({ id: 1, nombre: 'Primero', nivel: 'Primaria', orden: 1, activo: false }));
@@ -73,11 +74,10 @@ test('CupoDto trae los datos del admin y CupoDisponibleDto oculta los ocupados',
 });
 
 test('ResumenGradoDto suma las jornadas de un grado', () => {
-  const cupos = [
-    { jornada: 'Mañana', total: 30, disponibles: 0, estado: 'Agotado' },
-    { jornada: 'Tarde', total: 20, disponibles: 5, estado: 'Pocos cupos' }
-  ];
-  const dto = ResumenGradoDto.desde({ gradoId: 1, grado: 'Primero', nivel: 'Primaria' }, cupos);
+  const resumen = new ResumenGrado({ gradoId: 1, grado: 'Primero', nivel: 'Primaria' });
+  resumen.agregar({ jornada: 'Mañana', total: 30, disponibles: 0, estado: 'Agotado' });
+  resumen.agregar({ jornada: 'Tarde', total: 20, disponibles: 5, estado: 'Pocos cupos' });
+  const dto = ResumenGradoDto.desde(resumen);
   assert.strictEqual(dto.total, 50);
   assert.strictEqual(dto.disponibles, 5);
   assert.strictEqual(dto.hayDisponibles, true);

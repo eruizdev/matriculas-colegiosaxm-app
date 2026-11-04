@@ -4,6 +4,7 @@ const periodoAcademicoRepository = require('../repositories/periodo-academico.re
 const CupoDto = require('../dtos/cupo.dto');
 const CupoDisponibleDto = require('../dtos/cupo-disponible.dto');
 const ResumenGradoDto = require('../dtos/resumen-grado.dto');
+const ResumenGrado = require('../models/resumen-grado.model');
 const TotalesCupoDto = require('../dtos/totales-cupo.dto');
 const { BadRequestError, ConflictError, NotFoundError } = require('../errors');
 
@@ -42,18 +43,18 @@ class CupoService {
   }
 
   resumenPorGrado() {
-    const grupos = [];
+    const resumenes = [];
 
     this.listarDisponibles().forEach(cupo => {
-      let grupo = grupos.find(g => g.gradoId === cupo.gradoId);
-      if (!grupo) {
-        grupo = { gradoId: cupo.gradoId, grado: cupo.grado, nivel: cupo.nivel, cupos: [] };
-        grupos.push(grupo);
+      let resumen = resumenes.find(r => r.gradoId === cupo.gradoId);
+      if (!resumen) {
+        resumen = new ResumenGrado(cupo);
+        resumenes.push(resumen);
       }
-      grupo.cupos.push(cupo);
+      resumen.agregar(cupo);
     });
 
-    return grupos.map(g => ResumenGradoDto.desde(g, g.cupos));
+    return resumenes.map(r => ResumenGradoDto.desde(r));
   }
 
   totales() {
@@ -87,11 +88,13 @@ class CupoService {
   }
 
   actualizar(id, data) {
-    this.obtener(id);
-    return cupoRepository.update(id, {
+    const cupo = this.obtener(id);
+    const cambio = cupo.actualizar({
       total: Number(data.total),
       ocupados: Number(data.ocupados) || 0
     });
+    if (!cambio) throw new BadRequestError('Los cupos ocupados no pueden superar el total');
+    return cupo;
   }
 
   ocupar(id, cantidad = 1) {

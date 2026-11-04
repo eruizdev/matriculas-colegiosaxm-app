@@ -64,6 +64,9 @@ class AdminCupoController {
       cupoService.actualizar(req.params.id, req.body);
       this.volver(req, res);
     } catch (error) {
+      if (AppError.esDelCliente(error)) {
+        return this.mostrarError(res, error.mensajes(), {}, error.statusCode);
+      }
       next(error);
     }
   };

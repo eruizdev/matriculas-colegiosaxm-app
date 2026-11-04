@@ -35,3 +35,15 @@ test('ocupar y liberar cupos', () => {
   assert.strictEqual(cupo.ocupados, 2);
   assert.strictEqual(cupo.liberar(5), false);
 });
+
+test('actualiza total y ocupados solo si son validos', () => {
+  const cupo = new Cupo({ id: 1, gradoId: 1, periodoId: 1, jornada: 'Mañana', total: 30, ocupados: 10 });
+  assert.strictEqual(cupo.actualizar({ total: 40, ocupados: 20 }), true);
+  assert.strictEqual(cupo.total, 40);
+  assert.strictEqual(cupo.disponibles(), 20);
+
+  assert.strictEqual(cupo.actualizar({ total: 10, ocupados: 20 }), false);
+  assert.strictEqual(cupo.actualizar({ total: 0 }), false);
+  assert.strictEqual(cupo.actualizar({ total: 10, ocupados: -1 }), false);
+  assert.strictEqual(cupo.total, 40);
+});
