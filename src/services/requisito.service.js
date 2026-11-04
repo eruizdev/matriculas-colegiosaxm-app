@@ -7,6 +7,10 @@ class RequisitoService {
     return requisitoRepository.findAll().map(r => RequisitoDto.desde(r));
   }
 
+  listarObligatorios() {
+    return requisitoRepository.findObligatorios().map(r => RequisitoDto.desde(r));
+  }
+
   obtener(id) {
     const requisito = requisitoRepository.findById(id);
     if (!requisito) throw new NotFoundError('Requisito no encontrado');
@@ -24,7 +28,12 @@ class RequisitoService {
 
   actualizar(id, data) {
     this.obtener(id);
-    return requisitoRepository.update(id, data);
+    return requisitoRepository.update(id, {
+      titulo: data.titulo.trim(),
+      descripcion: data.descripcion.trim(),
+      orden: Number(data.orden) || 0,
+      obligatorio: data.obligatorio === 'on'
+    });
   }
 
   eliminar(id) {
