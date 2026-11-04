@@ -1,4 +1,5 @@
 const periodoAcademicoService = require('../../services/periodo-academico.service');
+const PeriodoAcademicoValidator = require('../../validators/periodo-academico.validator');
 const AppError = require('../../errors/app-error');
 
 class AdminPeriodoAcademicoController {
@@ -8,10 +9,7 @@ class AdminPeriodoAcademicoController {
   }
 
   crear(req, res) {
-    const errores = [];
-    if (!req.body.nombre) errores.push('El nombre es obligatorio');
-    if (!req.body.anio) errores.push('El año es obligatorio');
-
+    const errores = PeriodoAcademicoValidator.validar(req.body);
     if (errores.length > 0) {
       const periodos = periodoAcademicoService.listar();
       return res.status(400).render('admin/periodos', { titulo: 'Periodos académicos', periodos, errores, datos: req.body });
